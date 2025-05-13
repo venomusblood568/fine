@@ -24,3 +24,21 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+.bg-primary {
+  background-color: var(--color-primary);
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.bg-primary:hover {
+  background-color: #1f2a48; /* A darker version of #14213D */
+}
+.bg-secondary {
+  background-color: var(--color-secondary);
+  color: white;
+  transition: background-color 0.3s ease;
+}
+
+.bg-secondary:hover {
+  background-color: #e59d10; /* Slightly darker version */
+}

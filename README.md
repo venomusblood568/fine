@@ -4,7 +4,6 @@ A personal finance tracker built with Next.js and Tailwind CSS to help you manag
 
 ---
 
-
 ## Tech Stack
 
 - Next.js (React framework with SSR and API routes)

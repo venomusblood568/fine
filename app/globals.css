@@ -58,4 +58,9 @@ body {
 @keyframes blink {
   50% { border-color: transparent }
 }
+.bg-noise {
+  background-color: #0a0a0a;
+  background-image: url("https://www.transparenttextures.com/patterns/asfalt-light.png");
+  background-size: auto;
+}
 

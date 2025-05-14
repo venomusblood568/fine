@@ -47,16 +47,28 @@ body {
   overflow: hidden;
   border-right: 2px solid white;
   white-space: nowrap;
-  animation: typing 3s steps(30, end), blink 0.75s step-end infinite;
+   animation: typingLoop 6s steps(30, end) infinite, blink 0.7s step-end infinite;
 }
 
-@keyframes typing {
-  from { width: 0 }
-  to { width: 100% }
+/* Typing + Pause + Erasing + Pause Loop */
+@keyframes typingLoop {
+  0% {
+    width: 0;
+  }
+  40% {
+    width: 100%;
+  }
+  60% {
+    width: 100%;
+  }
+  100% {
+    width: 0;
+  }
 }
-
 @keyframes blink {
-  50% { border-color: transparent }
+  50% {
+    border-color: transparent;
+  }
 }
 .bg-noise {
   background-color: #0a0a0a;

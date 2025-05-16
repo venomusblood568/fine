@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Fine from "@/public/icons/fine";
 import Signin_btn from "./components/signin_btn";
 import Signup_btn from "./components/signup_btn";
@@ -34,8 +34,8 @@ export default function Home() {
           <h2>Hi, Sam this side 👋</h2>
           <br />
           <p>
-            This is one of my projects built to help me manage my funds
-            better. I hope you find it helpful too!
+            This is one of my projects built to help me manage my funds better.
+            I hope you find it helpful too!
           </p>
           <br />
           <div className="flex items-center justify-center gap-2.5">
@@ -43,7 +43,8 @@ export default function Home() {
               href="https://gourav-duck.vercel.app/"
               target="_blank"
               rel="noopener noreferrer"
-              className="border-red-500 rounded-2xl border-2 px-4 py-2 text-white hover:bg-blue-50 hover:text-black transition duration-300"
+              className="border-red-500 rounded-2xl border-2 px-4 py-2 text-white
+               hover:bg-blue-50 hover:text-black transition duration-300"
             >
               Portfolio
             </a>
@@ -51,7 +52,8 @@ export default function Home() {
               href="https://github.com/venomusblood568"
               target="_blank"
               rel="noopener noreferrer"
-              className="border-blue-500 rounded-2xl border-2 px-4 py-2 text-white hover:bg-blue-50 hover:text-black transition duration-300"
+              className="border-blue-500 rounded-2xl border-2 px-4 py-2 text-white 
+              hover:bg-blue-50 hover:text-black transition duration-300"
             >
               GitHub
             </a>
@@ -59,7 +61,8 @@ export default function Home() {
               href="https://www.linkedin.com/in/gourav-anand-jha/"
               target="_blank"
               rel="noopener noreferrer"
-              className="border-yellow-500 rounded-2xl border-2 px-4 py-2 text-white hover:bg-blue-50 hover:text-black transition duration-300"
+              className="border-yellow-500 rounded-2xl border-2 px-4 py-2 text-white
+               hover:bg-blue-50 hover:text-black transition duration-300"
             >
               LinkedIn
             </a>

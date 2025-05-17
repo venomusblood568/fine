@@ -1,4 +1,23 @@
+"use client";
+import React from "react";
+import { useRouter } from "next/navigation";
+
 export default function Signup() {
+  const router = useRouter();
+  const [user, setUser] = React.useState({
+    name: "",
+    username: "",
+    password: "",
+  });
+  const onSignup = async () => {};
+  
+  const onhomepage = () => {
+    router.push("/");
+  };
+
+  const onsigninpage = () => {
+    router.push("/signin");
+  };
   return (
     <div>
       <div
@@ -15,6 +34,8 @@ export default function Signup() {
                 type="text"
                 id="name"
                 placeholder="Name"
+                value={user.name}
+                onChange={(e) => setUser({ ...user, name: e.target.value })}
                 className="bg-transparent border border-gray-500 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white"
               />
             </div>
@@ -23,6 +44,8 @@ export default function Signup() {
                 type="text"
                 id="username"
                 placeholder="Username"
+                value={user.username}
+                onChange={(e) => setUser({ ...user, username: e.target.value })}
                 className="bg-transparent border border-gray-500 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white"
               />
             </div>
@@ -31,15 +54,34 @@ export default function Signup() {
                 type="password"
                 id="name"
                 placeholder="Password"
+                value={user.password}
+                onChange={(e) => setUser({ ...user, password: e.target.value })}
                 className="bg-transparent border border-gray-500 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white"
               />
             </div>
             <button
               type="submit"
+              onClick={onSignup}
               className="mt-4 bg-secondary hover:bg-secondary-hover text-white py-2 rounded-md font-semibold transition-colors"
             >
               Submit
             </button>
+            <div className="flex w-full gap-3 rounded-xl">
+              <button
+                type="button"
+                onClick={onhomepage}
+                className="w-1/2 mt-4 bg-primary hover:bg-secondary-hover text-white py-2 rounded-l-md font-semibold transition-colors"
+              >
+                Home
+              </button>
+              <button
+                type="button"
+                onClick={onsigninpage}
+                className="w-1/2 mt-4 bg-primary hover:bg-secondary-hover text-white py-2 rounded-r-md font-semibold transition-colors"
+              >
+                Sign In
+              </button>
+            </div>
           </form>
         </div>
       </div>

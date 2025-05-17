@@ -5,7 +5,7 @@ export default function Signup() {
         style={{ fontFamily: "var(--font-dm-mono)" }}
         className="bg-noise text-white min-h-screen flex items-center justify-center"
       >
-        <div className="p-6 g-2  border rounded-xl shadow-lg w-full max-w-md ">
+        <div className="border border-gray-600 bg-black/30 backdrop-blur p-6 rounded-xl shadow-lg w-full max-w-md">
           <h1 className="text-4xl font-bold tracking-wider mb-4 text-center">
             Sign Up
           </h1>

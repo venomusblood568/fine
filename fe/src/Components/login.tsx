@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-
+import Aurora from "../assets/bg_arora"; 
 export default function Login() {
   const navigate = useNavigate();
   const [showPassword, setshowPassword] = useState(false);
@@ -18,7 +18,15 @@ export default function Login() {
 
   return (
     <div style={{ fontFamily: "'Space Mono', monospace" }}>
-      <div className="bg-black text-white min-h-screen flex items-center justify-center">
+      <div className="absolute bg-black inset-0 z-0">
+        <Aurora
+          colorStops={["#3A29FF", "#2ded40", "#3a29ff"]}
+          blend={0.31}
+          amplitude={0.5}
+          speed={0.6}
+        />
+      </div>
+      <div className=" text-white min-h-screen flex items-center justify-center">
         <div className="border border-gray-600 bg-black/30 backdrop-blur p-6 rounded-xl shadow-lg w-full max-w-md">
           <h1 className="text-4xl font-bold tracking-wider mb-4 text-center">
             Login
@@ -38,7 +46,6 @@ export default function Login() {
                 className="bg-transparent border border-gray-500 px-3 py-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-white"
               />
               <button
-                
                 type="button"
                 onClick={togglePassword}
                 className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-400 hover:text-white focus:outline-none"

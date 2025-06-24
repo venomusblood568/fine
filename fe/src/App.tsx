@@ -23,12 +23,20 @@ function App() {
               Finance Isn’t Nearly Easy
             </span>
           </p>
-          <button
-            onClick={() => navigate("/login")}
-            className="mt-6 px-6 py-2 rounded-2xl bg-white text-black font-semibold hover:bg-gray-300 transition duration-300 hover:cursor-pointer"
-          >
-            Login
-          </button>
+          <div className="flex gap-8">
+            <button
+              onClick={() => navigate("/signup")}
+              className="mt-6 px-6 py-2 rounded-2xl bg-white text-black font-semibold hover:bg-gray-300 transition duration-300 hover:cursor-pointer"
+            >
+              Signup
+            </button>
+            <button
+              onClick={() => navigate("/login")}
+              className="mt-6 px-6 py-2 rounded-2xl bg-white text-black font-semibold hover:bg-gray-300 transition duration-300 hover:cursor-pointer"
+            >
+              Login
+            </button>
+          </div>
         </div>
 
         <div

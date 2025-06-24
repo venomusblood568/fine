@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 import User from "./user";
 import dotenv from "dotenv";
-
+import Account from "./account";
+import Transaction from "./transactions";
 dotenv.config();
 
 const uri = process.env.MONGODB_URI;
@@ -15,4 +16,4 @@ mongoose
   .catch((error) => console.log("MongoDB connection error:", error));
 
 
-export {User};
+export {User,Account,Transaction};

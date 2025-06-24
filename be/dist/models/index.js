@@ -3,11 +3,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.User = void 0;
+exports.Transaction = exports.Account = exports.User = void 0;
 const mongoose_1 = __importDefault(require("mongoose"));
 const user_1 = __importDefault(require("./user"));
 exports.User = user_1.default;
 const dotenv_1 = __importDefault(require("dotenv"));
+const account_1 = __importDefault(require("./account"));
+exports.Account = account_1.default;
+const transactions_1 = __importDefault(require("./transactions"));
+exports.Transaction = transactions_1.default;
 dotenv_1.default.config();
 const uri = process.env.MONGODB_URI;
 if (!uri) {

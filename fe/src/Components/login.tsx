@@ -30,6 +30,7 @@ export default function Login() {
 
       if (response.ok) {
         alert("Login Successful");
+        localStorage.setItem("token", data.token);
         navigate("/dashboard");
       } else {
         alert(data.error || "Invalid credentials");

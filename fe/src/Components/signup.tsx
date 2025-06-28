@@ -22,7 +22,7 @@ export default function Signup() {
   const[userName, setuserName] = useState("");
   const[password,setpassword] = useState("");
 
-  const handleSubmit = async(e) => {
+  const handleSubmit = async(e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
       const response = await fetch("http://localhost:3001/api/auth/signup", {

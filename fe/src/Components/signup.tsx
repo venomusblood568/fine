@@ -16,6 +16,40 @@ export default function Signup() {
     const togglePassword = () => {
       setshowPassword((prev) => !prev)
     }
+
+  const[firstName,setfirstName] = useState("");
+  const[lastName,setlastName] = useState("");
+  const[userName, setuserName] = useState("");
+  const[password,setpassword] = useState("");
+
+  const handleSubmit = async(e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch("http://localhost:3001/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstname: firstName,
+          lastname: lastName,
+          username: userName,
+          password: password,
+        }),
+      });
+      const data = await response.json()
+      if(response.ok){
+        alert("Signup successful!");
+        navigate("/login");
+      }else{
+        alert(data.error || "Signup Failed")
+      }
+    } catch (error) {
+      alert("Server error")
+      console.log(error)
+    }
+  }
+
   return (
     <div>
       <div
@@ -34,20 +68,24 @@ export default function Signup() {
           <h1 className="text-4xl font-bold tracking-wider mb-4 text-center">
             Sign Up
           </h1>
-          <form className="flex flex-col gap-4">
-            <div className="flex flex-col">
+          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+            <div className="flex flex-col ">
               <input
                 type="text"
-                id="name"
+                id="firstname"
                 placeholder="First Name"
+                value={firstName}
+                onChange={(e) => setfirstName(e.target.value)}
                 className="bg-transparent border border-gray-500 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white"
               />
             </div>
             <div className="flex flex-col">
               <input
                 type="text"
-                id="name"
+                id="lastname"
                 placeholder="Last Name"
+                value={lastName}
+                onChange={(e) => setlastName(e.target.value)}
                 className="bg-transparent border border-gray-500 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white"
               />
             </div>
@@ -56,6 +94,8 @@ export default function Signup() {
                 type="text"
                 id="username"
                 placeholder="Username"
+                value={userName}
+                onChange={(e) => setuserName(e.target.value)}
                 className="bg-transparent border border-gray-500 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white"
               />
             </div>
@@ -64,6 +104,8 @@ export default function Signup() {
                 type={showPassword ? "text" : "password"}
                 id="password"
                 placeholder="Password"
+                value={password}
+                onChange={(e) => setpassword(e.target.value)}
                 className="bg-transparent border border-gray-500 px-3 py-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-white"
               />
               <button
@@ -76,6 +118,7 @@ export default function Signup() {
             </div>
             <button
               type="submit"
+              onSubmit={handleSubmit}
               className="mt-4 bg-secondary hover:bg-secondary-hover text-white py-2 rounded-md font-semibold transition-colors hover:bg-gray-700 cursor-pointer"
             >
               Submit

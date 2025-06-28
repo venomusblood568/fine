@@ -6,8 +6,10 @@ import {
   VscSettingsGear,
   VscExport,
 } from "react-icons/vsc";
+import { useNavigate } from 'react-router-dom';
 
 export default function Dashboard() {
+  const navigate = useNavigate();
   const items = [
     {
       icon: <VscHome size={18} className="text-white" />,
@@ -27,7 +29,7 @@ export default function Dashboard() {
     {
       icon: <VscExport size={18} className="text-white" />,
       label: "Logout",
-      onClick: () => alert("Logout!!"),
+      onClick: () => navigate('/')
     },
   ];
 

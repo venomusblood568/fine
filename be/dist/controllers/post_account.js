@@ -8,30 +8,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.get_account = void 0;
+exports.create_account = void 0;
 const models_1 = require("../models");
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
-const JWT_SECRET = process.env.JWT_SECRET;
-const get_account = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const create_account = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        if (!req.user || !req.user.id) {
+        const { accountName, accountType, balance } = req.body;
+        if (!req.user) {
             res.status(401).json({ message: "Unauthorized" });
             return;
         }
-        const account = yield models_1.Account.find({ userId: req.user.id });
-        if (account.length === 0) {
-            res.status(200).json({ account: [] });
+        if (!accountName || !accountType) {
+            res.status(400).json({ message: "Account name and type are required" });
+            return;
         }
-        res.status(200).json({ account });
+        const newAccount = new models_1.Account({
+            userId: req.user.id,
+            accountName,
+            accountType,
+            balance: balance !== null && balance !== void 0 ? balance : 0,
+        });
+        yield newAccount.save();
+        res
+            .status(201)
+            .json({
+            message: "Account created successfully",
+            account: newAccount,
+        });
     }
     catch (error) {
-        console.log("Error in get_account: ", error);
-        res.status(500).json({ message: "Server Errro" });
+        console.log(`Error in create account`, error);
+        res.status(500).json({ message: "Server Error" });
     }
 });
-exports.get_account = get_account;
+exports.create_account = create_account;

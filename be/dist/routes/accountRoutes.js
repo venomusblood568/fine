@@ -4,11 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const testRoutes_1 = __importDefault(require("./testRoutes"));
-const authRoutes_1 = __importDefault(require("./authRoutes"));
-const accountRoutes_1 = __importDefault(require("./accountRoutes"));
+const middleware_1 = require("../middlewares/middleware");
+const get_account_1 = require("../controllers/get_account");
 const router = express_1.default.Router();
-router.use("/test", testRoutes_1.default);
-router.use("/auth", authRoutes_1.default);
-router.use("/acc", accountRoutes_1.default);
+// @ts-ignore
+router.get("/accounts", middleware_1.middleware, get_account_1.get_account);
 exports.default = router;

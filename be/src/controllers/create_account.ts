@@ -1,5 +1,6 @@
 import { Request,Response } from "express";
 import { Account } from "../models";
+
 export const create_account = async(req: Request, res:Response): Promise<void> => {
     try {
        const {accountName, accountType, balance} = req.body;

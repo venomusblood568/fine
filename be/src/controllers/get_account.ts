@@ -2,7 +2,6 @@ import { Response, Request } from "express";
 import {Account} from "../models";
 import dotenv from "dotenv";
 
-
 dotenv.config()
 
 const JWT_SECRET = process.env.JWT_SECRET

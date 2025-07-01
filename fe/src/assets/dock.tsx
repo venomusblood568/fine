@@ -78,6 +78,7 @@ function DockItem({
 
       {Children.map(children, (child) =>
         typeof child === "object" && child !== null && "type" in child
+          
           ? cloneElement(child as ReactElement, { isHovered })
           : child
       )}

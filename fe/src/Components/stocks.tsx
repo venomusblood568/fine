@@ -18,8 +18,7 @@ type UserType = {
   username: string;
 };
 
-
-export default function Dashboard() {
+export default function Stocks() {
   const navigate = useNavigate();
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [userData, setUserData] = useState<UserType | null>(null);
@@ -42,10 +41,10 @@ export default function Dashboard() {
             },
           });
 
-          if(response.status === 403){
-            localStorage.removeItem("token")
-            navigate("/")
-            return
+          if (response.status === 403) {
+            localStorage.removeItem("token");
+            navigate("/");
+            return;
           }
 
           const data = await response.json();
@@ -72,7 +71,7 @@ export default function Dashboard() {
     {
       icon: <VscHome size={18} className="text-white" />,
       label: "Home",
-      onClick: () => navigate("/dashboard")
+      onClick: () => navigate("/dashboard"),
     },
     {
       icon: <VscCircleLarge size={18} className="text-white" />,
@@ -117,7 +116,7 @@ export default function Dashboard() {
       </div>
 
       {/* Page Content */}
-      <h1 className="relative z-10 text-white text-3xl p-4">Hi, User!</h1>
+      <h1 className="relative z-10 text-white text-3xl p-4">STOCKS PAGE</h1>
 
       {/* Dock */}
       <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-20">

@@ -29,7 +29,6 @@ export default function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Login Successful");
         localStorage.setItem("token", data.token);
         navigate("/dashboard");
       } else {

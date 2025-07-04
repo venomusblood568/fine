@@ -11,7 +11,7 @@ function App() {
 
   return (
     <div
-      className="relative bg-black text-white min-h-screen overflow-hidden"
+      className="relative bg-black text-white min-h-screen"
       style={{ fontFamily: "'Space Mono', monospace" }}
     >
       <div className="absolute inset-0 z-0">

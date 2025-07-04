@@ -7,7 +7,7 @@ import WeeklyGraph from "./small_components/weeklygraph";
 
 export default function Dashboard() {
   return (
-    <div className="bg-black text-white w-screen h-screen overflow-hidden font-mono flex">
+    <div className="bg-black text-white w-screen h-screen  font-mono flex">
       <CustomBg />
 
       {/* Sidebar */}

@@ -1,7 +1,8 @@
 import { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -27,9 +28,9 @@ export default function Sidebar() {
 
         {/* Links */}
         <nav className="flex flex-col space-y-4 text-sm">
-          <SidebarLink label="Dashboard" />
-          <SidebarLink label="Money" />
-          <SidebarLink label="Stocks" />
+          <SidebarLink label="Dashboard" onclick={() => navigate("/dashboard")}/>
+          <SidebarLink label="Money" onclick={() => navigate("/money")}/>
+          <SidebarLink label="Stocks" onclick={() => navigate("/stocks")}/>
           <SidebarLink label="Profile" />
           <SidebarLink label="Settings" />
         </nav>
@@ -37,15 +38,27 @@ export default function Sidebar() {
         {/* Footer */}
         <div className="flex-grow" />
         <div className="hover:text-red-500">
-          <SidebarLink label="Logout" />
+          <SidebarLink 
+            label="Logout" 
+            onclick={() => navigate("/")} 
+          />
         </div>
       </div>
     </>
   );
 }
-function SidebarLink({ label }: { label: string }) {
+
+type SidebarProp = {
+  label: string;
+  onclick?: () => void;
+};
+
+function SidebarLink({ label, onclick }: SidebarProp) {
   return (
-    <button className="text-left px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors w-full">
+    <button
+      onClick={onclick}
+      className="text-left px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors w-full"
+    >
       {label}
     </button>
   );

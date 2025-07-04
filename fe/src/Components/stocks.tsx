@@ -14,7 +14,7 @@ export default function Stocks() {
         <Sidebar />
 
         {/* Page Content */}
-        <main className="flex-1 px-6 py-8">
+        <main className="flex-1 px-6 py-15">
           <h1 className="text-white text-3xl font-bold mb-4">Stocks Page</h1>
 
           {/* You can add your page sections here */}

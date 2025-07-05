@@ -70,19 +70,28 @@ export default function Expense() {
               key={tx._id}
               className="flex justify-between border-white/10 pb-2 border-b uppercase"
             >
-              <div>
-                <p className="font-medium">{tx.description}</p>
-                <p className="text-xs text-gray-600">
-                  {tx.accountId.accountName} • {tx.toWhom}
+              <div className="space-y-1">
+                <p className="font-semibold text-white">{tx.description}</p>
+
+                <p className="text-xs text-gray-500">
+                  {new Date(tx.date).toLocaleString("en-US", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })}
                 </p>
-                <p className="text-xs text-gray-600"></p>
+
+                <p className="text-sm text-gray-500">
+                  {tx.accountId.accountName}
+                  {tx.toWhom && ` • ${tx.toWhom}`}
+                </p>
               </div>
+
               <span
                 className={
                   tx.type === "Income" ? "text-green-600" : "text-red-600"
                 }
               >
-                ${tx.amount}
+                ₹ {tx.amount}
               </span>
             </div>
           ))

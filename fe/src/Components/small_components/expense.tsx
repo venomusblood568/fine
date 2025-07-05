@@ -36,7 +36,7 @@ export default function Expense() {
         }
 
         const data = await res.json();
-        setTransactions(data.transaction || []);
+        setTransactions((data.transaction || []).slice(0, 30));
       } catch (error) {
         console.error(`Error fetching transactions:`, error);
       }finally{
@@ -49,7 +49,7 @@ export default function Expense() {
     <div className="lg:col-span-5 bg-white/10 rounded-2xl p-4 col-span-1 shadow-sm backdrop-blur-sm  overflow-y-auto">
       {/* Header Row */}
       <div className="flex flex-row justify-between items-center pb-4">
-        <h2 className="text-lg font-semibold">Today's Transactions</h2>
+        <h2 className="text-lg font-semibold">Recent Transactions</h2>
         <button className="border border-white/20 bg-white/10 text-sm text-white rounded px-4 py-1 hover:bg-white/50 transition">
           Add
         </button>
@@ -68,16 +68,21 @@ export default function Expense() {
           transactions.map((tx) => (
             <div
               key={tx._id}
-              className="flex justify-between border-white/10 pb-1"
+              className="flex justify-between border-white/10 pb-2 border-b uppercase"
             >
               <div>
                 <p className="font-medium">{tx.description}</p>
                 <p className="text-xs text-gray-600">
-                  {tx.accountId.accountName} • {tx.type}
+                  {tx.accountId.accountName} • {tx.toWhom}
                 </p>
+                <p className="text-xs text-gray-600"></p>
               </div>
-              <span className={tx.type === "Income" ? "text-green-600": "text-red-600"}>
-                  ${tx.amount}
+              <span
+                className={
+                  tx.type === "Income" ? "text-green-600" : "text-red-600"
+                }
+              >
+                ${tx.amount}
               </span>
             </div>
           ))

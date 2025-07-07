@@ -17,7 +17,7 @@ export default function Dashboard() {
       <main className="flex-1 h-full overflow-y-auto px-6 py-15">
         <h1 className="text-3xl font-bold mb-6">Dashboard</h1>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 h-[calc(100vh-8rem)]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <Expense />
 
           <div className="lg:col-span-7 flex flex-col gap-11">

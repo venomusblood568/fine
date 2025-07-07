@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useTokenExpiryRedirect from "../customhook/expirytoken";
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ type SidebarProp = {
 };
 
 function SidebarLink({ label, onclick }: SidebarProp) {
+  useTokenExpiryRedirect();
   return (
     <button
       onClick={onclick}

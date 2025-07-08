@@ -61,7 +61,11 @@ export default function Expense() {
           setTransactions(txData.transaction.slice(0, 30));
         }
         if (accData?.account) {
-          setAccounts(accData.account);
+          const validAccounts = accData.account.filter(
+            (acc: AccountType & { balance?: number }) => (acc.balance ?? 0) > 0
+          );
+
+          setAccounts(validAccounts);
         }
       } catch (error) {
         console.error(" Error fetching data:", error);

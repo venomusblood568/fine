@@ -11,6 +11,16 @@ type AccountType = {
 export default function Account() {
   const [account, setAccount] = useState<AccountType[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showSheet, setShowSheet] = useState(false);
+
+  // New form State
+  const [form, setForm] = useState({
+    accountName:"",
+    accountType:"",
+    balance:"",
+})
+
+  //Fetch account
   useEffect(() => {
     const fetchAccount = async () => {
       const token = localStorage.getItem("token");
@@ -39,6 +49,44 @@ export default function Account() {
     };
     fetchAccount();
   }, []);
+
+  const handleCreateAccount = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert(`No token found`);
+      return;
+    }
+    const payload = {
+      accountName: form.accountName.trim(),
+      accountType: form.accountType.trim().toLowerCase(),
+      balance: parseFloat(form.balance),
+    };
+    if (!form.accountName.trim() || !form.accountType.trim()) {
+      alert("Account name and type are required");
+      return;
+    }
+    try {
+      const res = await fetch("http://localhost:3001/api/acc/create-account",{
+        method:"POST",
+        headers:{
+          "Content-type":"application/json",
+          Authorization:`Bearer ${token}`,
+        },
+        body: JSON.stringify(payload),
+      })
+        const result = await res.json();
+        if(!res.ok){
+          throw new Error(result.message || `Account creation failed`)
+        }
+        setAccount((prev) => [result.account, ...prev])
+        setShowSheet(false);
+        setForm({accountName: "", accountType: "", balance: ""});
+    } catch (error) {
+      console.error("Error creating account:", error);
+      alert("Account creation failed");
+    }
+  };
   return (
     <>
       <div className="bg-white/10 rounded-2xl p-4 shadow-sm backdrop-blur-sm overflow-y-auto h-64">
@@ -46,9 +94,79 @@ export default function Account() {
         {/* Set height here */}
         <div className="flex flex-row justify-between items-center pb-2">
           <h2 className="text-lg font-semibold mb-2 pt-2">Account Report</h2>
-          <button className="border border-white/20 bg-white/10 text-sm text-white rounded px-4 py-1 hover:bg-white/50 transition">
+          <button
+            onClick={() => setShowSheet(true)}
+            className="border border-white/20 bg-white/10 text-sm text-white rounded px-4 py-1 hover:bg-white/50 transition"
+          >
             Add
           </button>
+          {/* Bottom Sheet */}
+          {showSheet && (
+            <div className="fixed inset-0 z-40 bg-black/40 flex items-center justify-center">
+              <div className="bg-[#1c1c1e] w-full max-w-sm mx-auto rounded-xl p-4 text-white space-y-3 text-sm shadow-md">
+                {/* Drag indicator */}
+                <div className="w-10 h-1.5 bg-white/30 mx-auto rounded-full" />
+
+                <h3 className="text-base font-semibold text-center">
+                  Add Account
+                </h3>
+
+                <form onSubmit={handleCreateAccount} className="space-y-3">
+                  <input
+                    placeholder="Account Name"
+                    value={form.accountName}
+                    onChange={(e) =>
+                      setForm({ ...form, accountName: e.target.value })
+                    }
+                    className="w-full px-3 py-1.5 rounded bg-white/10 placeholder-gray-400 outline-none text-sm"
+                    required
+                  />
+                  <select
+                    required
+                    value={form.accountType}
+                    onChange={(e) =>
+                      setForm({ ...form, accountType: e.target.value })
+                    }
+                    className="w-full px-3 py-2 rounded bg-white/10 outline-none"
+                  >
+                    <option value="">Select account type</option>
+                    <option value="cash">Cash</option>
+                    <option value="bank">Bank Account</option>
+                    <option value="wallet">Wallet</option>
+                    <option value="credit card">Credit Card</option>
+                    <option value="investment">Investment</option>
+                    <option value="savings">Savings</option>
+                  </select>
+                  <input
+                    placeholder="Balance"
+                    type="number"
+                    value={form.balance}
+                    onChange={(e) =>
+                      setForm({ ...form, balance: e.target.value })
+                    }
+                    className="w-full px-3 py-1.5 rounded bg-white/10 placeholder-gray-400 outline-none text-sm"
+                    required
+                  />
+
+                  <div className="flex justify-end gap-3 pt-2">
+                    <button
+                      type="button"
+                      onClick={() => setShowSheet(false)}
+                      className="text-sm px-3 py-1.5 border border-white/30 rounded hover:bg-white/10"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="submit"
+                      className="text-sm px-3 py-1.5 bg-white text-black rounded hover:bg-gray-300"
+                    >
+                      Add
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
         {/* Divider */}
         <hr className="border-white/10 mb-2" />

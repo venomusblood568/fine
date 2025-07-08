@@ -142,7 +142,7 @@ export default function Expense() {
       </div>
       {/* Bottom Sheet */}
       {showSheet && (
-        <div className="fixed inset-0 z-40 bg-black/40 flex items-start justify-center">
+        <div className="fixed inset-0 z-40 bg-black/40 flex items- justify-center">
           <div className="bg-[#1c1c1e] w-full max-w-md mx-auto mt-10 rounded-b-2xl p-6 text-white space-y-4 shadow-lg">
             <div className="w-12 h-1.5 bg-white/30 mx-auto rounded-full" />
             <h3 className="text-lg font-semibold text-center">

@@ -129,7 +129,7 @@ export default function Expense() {
   };
 
   return (
-    <div className="lg:col-span-5 bg-white/10 rounded-2xl p-4 col-span-1 shadow-sm backdrop-blur-sm overflow-y-auto">
+    <div className="lg:col-span-5 bg-white/10 rounded-2xl p-4 col-span-1 shadow-sm backdrop-blur-sm h-172 overflow-y-auto">
       {/* Header Row */}
       <div className="flex flex-row justify-between items-center pb-4">
         <h2 className="text-lg font-semibold">Recent Transactions</h2>

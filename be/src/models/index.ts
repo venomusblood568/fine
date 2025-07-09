@@ -3,6 +3,7 @@ import User from "./user";
 import dotenv from "dotenv";
 import Account from "./account";
 import Transaction from "./transactions";
+import Stock from "./stock";
 dotenv.config();
 
 const uri = process.env.MONGODB_URI;
@@ -16,4 +17,4 @@ mongoose
   .catch((error) => console.log("MongoDB connection error:", error));
 
 
-export {User,Account,Transaction};
+export {User,Account,Transaction,Stock};

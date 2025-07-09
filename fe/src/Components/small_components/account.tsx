@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { DeleteIcon } from "../../icons/delete";
+import { EditIcon } from "../../icons/edit";
 
 type AccountType = {
   _id: string;
@@ -15,10 +17,10 @@ export default function Account() {
 
   // New form State
   const [form, setForm] = useState({
-    accountName:"",
-    accountType:"",
-    balance:"",
-})
+    accountName: "",
+    accountType: "",
+    balance: "",
+  });
 
   //Fetch account
   useEffect(() => {
@@ -67,21 +69,21 @@ export default function Account() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:3001/api/acc/create-account",{
-        method:"POST",
-        headers:{
-          "Content-type":"application/json",
-          Authorization:`Bearer ${token}`,
+      const res = await fetch("http://localhost:3001/api/acc/create-account", {
+        method: "POST",
+        headers: {
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
-      })
-        const result = await res.json();
-        if(!res.ok){
-          throw new Error(result.message || `Account creation failed`)
-        }
-        setAccount((prev) => [result.account, ...prev])
-        setShowSheet(false);
-        setForm({accountName: "", accountType: "", balance: ""});
+      });
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.message || `Account creation failed`);
+      }
+      setAccount((prev) => [result.account, ...prev]);
+      setShowSheet(false);
+      setForm({ accountName: "", accountType: "", balance: "" });
     } catch (error) {
       console.error("Error creating account:", error);
       alert("Account creation failed");
@@ -179,13 +181,36 @@ export default function Account() {
             account.map((tx) => (
               <div
                 key={tx._id}
-                className="flex justify-between border-white/10 pb-2 border-b uppercase"
+                className="flex items-center justify-between gap-4 border-b border-white/10 pb-3"
               >
-                <div>
-                  <p className="font-medium">{tx.accountName}</p>
+                {/* Action buttons */}
+                <div className="flex flex-col items-center gap-2 pt-1">
+                  <button
+                    className="text-gray-400 hover:text-yellow-400 transition"
+                    title="Edit account"
+                  >
+                    <EditIcon />
+                  </button>
+                  <button
+                    className="text-gray-400 hover:text-red-500 transition"
+                    title="Delete account"
+                  >
+                    <DeleteIcon />
+                  </button>
+                </div>
+
+                {/* Account name + type */}
+                <div className="flex flex-col flex-grow text-left gap-0.5">
+                  <p className="font-semibold text-white">{tx.accountName}</p>
                   <p className="text-xs text-gray-500">{tx.accountType}</p>
                 </div>
-                <span>₹ {tx.balance}</span>
+
+                {/* Balance */}
+                <div className="text-right">
+                  <span className="font-semibold text-white whitespace-nowrap">
+                    ₹ {tx.balance}
+                  </span>
+                </div>
               </div>
             ))
           )}

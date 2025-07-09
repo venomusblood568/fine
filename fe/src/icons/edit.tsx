@@ -7,10 +7,11 @@ export function EditIcon(){
           height="20"
           viewBox="0 0 24 24"
           fill="none"
-          stroke="#ffffff"
+          stroke="gray"
           stroke-width="1.5"
           stroke-linecap="round"
           stroke-linejoin="round"
+          className=" hover:stroke-white transition duration-200 hover:cursor-pointer "
         >
           <polygon points="16 3 21 8 8 21 3 21 3 16 16 3"></polygon>
         </svg>

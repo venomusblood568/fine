@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { DeleteIcon } from "../../icons/delete";
 import { EditIcon } from "../../icons/edit";
-import type { ReactFormState } from "react-dom/client";
+
 
 type AccountType = {
   _id: string;

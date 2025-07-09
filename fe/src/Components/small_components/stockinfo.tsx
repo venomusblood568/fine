@@ -13,7 +13,7 @@ export default function StockInfo() {
             <InfoIcon />
           </button>
           {showInfo && (
-            <div className="absolute z-25 mt-2 left-0 w-56 bg-white text-black text-sm p-3 rounded-2xl shadow-lg border border-gray-200 translate-y-8 translate-x-2">
+            <div className="absolute z-25 mt-2 left-0 w-50 bg-white text-black text-sm p-3 rounded-2xl shadow-lg border border-gray-200 translate-y-8 translate-x-2">
               Stock prices are fetched periodically for insights. Use platforms
               like Groww for real-time data.
             </div>

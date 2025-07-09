@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { DeleteIcon } from "../../icons/delete";
 import { EditIcon } from "../../icons/edit";
+import type { ReactFormState } from "react-dom/client";
 
 type AccountType = {
   _id: string;
@@ -14,6 +15,7 @@ export default function Account() {
   const [account, setAccount] = useState<AccountType[]>([]);
   const [loading, setLoading] = useState(true);
   const [showSheet, setShowSheet] = useState(false);
+  const [editId, setEditId] = useState<string | null>(null);
 
   // New form State
   const [form, setForm] = useState({
@@ -22,7 +24,7 @@ export default function Account() {
     balance: "",
   });
 
-  //Fetch account
+  // Fetch account
   useEffect(() => {
     const fetchAccount = async () => {
       const token = localStorage.getItem("token");
@@ -52,6 +54,7 @@ export default function Account() {
     fetchAccount();
   }, []);
 
+  // Handle Create Account
   const handleCreateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
@@ -83,12 +86,90 @@ export default function Account() {
       }
       setAccount((prev) => [result.account, ...prev]);
       setShowSheet(false);
+      window.location.reload();
       setForm({ accountName: "", accountType: "", balance: "" });
     } catch (error) {
       console.error("Error creating account:", error);
       alert("Account creation failed");
     }
   };
+
+  // Handle Update Account
+  const handleDelete = async (axId: string) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert(`Token missing`);
+    }
+    const confirmed = window.confirm(
+      `Are you sure you want to delete this account? `
+    );
+    if (!confirmed) {
+      return;
+    }
+    try {
+      const res = await fetch(
+        `http://localhost:3001/api/acc/delete-account/${axId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.message || `Failed to delete account;`);
+      }
+      setAccount((prev) => prev.filter((tx) => tx._id !== axId));
+      window.location.reload();
+    } catch (error) {
+      console.log(`Error deleteing Account`, error);
+    }
+  };
+
+  // Handle update Account
+  const handleUpdateAccoutn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editId) return;
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.error(`No token found`);
+      return;
+    }
+    const payload = {
+      accountName: form.accountName.trim(),
+      accountType: form.accountType.trim().toLowerCase(),
+      balance: parseFloat(form.balance),
+    };
+    try {
+      const res = await fetch(
+        `http://localhost:3001/api/acc/update-account/${editId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+      const result = await res.json();
+      if (!res.ok) {
+        throw new Error(result.message || "Update Failed");
+      }
+      setEditId(null);
+      setShowSheet(false);
+      setForm({
+        accountName: "",
+        accountType: "",
+        balance: "",
+      });
+      window.location.reload();
+    } catch (error) {
+      console.error(`Update error`, error);
+    }
+  };
+
   return (
     <>
       <div className="bg-white/10 rounded-2xl p-4 shadow-sm backdrop-blur-sm overflow-y-auto h-64">
@@ -113,7 +194,10 @@ export default function Account() {
                   Add Account
                 </h3>
 
-                <form onSubmit={handleCreateAccount} className="space-y-3">
+                <form
+                  onSubmit={editId ? handleUpdateAccoutn : handleCreateAccount}
+                  className="space-y-3"
+                >
                   <input
                     placeholder="Account Name"
                     value={form.accountName}
@@ -153,7 +237,15 @@ export default function Account() {
                   <div className="flex justify-end gap-3 pt-2">
                     <button
                       type="button"
-                      onClick={() => setShowSheet(false)}
+                      onClick={() => {
+                        setShowSheet(false);
+                        setEditId(null);
+                        setForm({
+                          accountName: "",
+                          accountType: "",
+                          balance: "",
+                        });
+                      }}
                       className="text-sm px-3 py-1.5 border border-white/30 rounded hover:bg-white/10"
                     >
                       Cancel
@@ -162,7 +254,7 @@ export default function Account() {
                       type="submit"
                       className="text-sm px-3 py-1.5 bg-white text-black rounded hover:bg-gray-300"
                     >
-                      Add
+                      {editId ? "Update" : "Add"}
                     </button>
                   </div>
                 </form>
@@ -186,13 +278,22 @@ export default function Account() {
                 {/* Action buttons */}
                 <div className="flex flex-col items-center gap-2 pt-1">
                   <button
+                    onClick={() => {
+                      setEditId(tx._id);
+                      setForm({
+                        accountName: tx.accountName,
+                        accountType: tx.accountType,
+                        balance: tx.balance.toString(),
+                      });
+                      setShowSheet(true);
+                    }}
                     className="text-gray-400 hover:text-yellow-400 transition"
                     title="Edit account"
                   >
                     <EditIcon />
                   </button>
                   <button
-                    className="text-gray-400 hover:text-red-500 transition"
+                    onClick={() => handleDelete(tx._id)}
                     title="Delete account"
                   >
                     <DeleteIcon />

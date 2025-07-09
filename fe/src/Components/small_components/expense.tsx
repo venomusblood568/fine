@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { DeleteIcon } from "../../icons/delete";
 
 type TransactionType = {
   _id: string;
@@ -254,13 +255,21 @@ export default function Expense() {
                 </p>
               </div>
 
-              <span
-                className={
-                  tx.type === "Income" ? "text-green-600" : "text-red-600"
-                }
-              >
-                ₹ {tx.amount}
-              </span>
+              <div className="flex flex-col items-end gap-3 pt-1 min-w-[60px]">
+                <span
+                  className={`text-sm ${
+                    tx.type === "Income" ? "text-green-500" : "text-red-500"
+                  }`}
+                >
+                  ₹ {tx.amount}
+                </span>
+                <button
+                  className="text-gray-400 hover:text-red-500 transition duration-200"
+                  title="Delete transaction"
+                >
+                  <DeleteIcon />
+                </button>
+              </div>
             </div>
           ))
         )}

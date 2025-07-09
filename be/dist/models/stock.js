@@ -16,12 +16,23 @@ const stockSchema = new mongoose_1.default.Schema({
         trim: true,
         minlength: 1,
     },
+    symbol: {
+        type: String,
+        required: true,
+        trim: true,
+        uppercase: true,
+    },
+    exchange: {
+        type: String,
+        enum: ["NSE", "BSE"],
+        default: "NSE",
+    },
     quantity: {
         type: Number,
         required: true,
         min: 1,
     },
-    priceBoughtAt: {
+    invested: {
         type: Number,
         required: true,
         min: 0,
@@ -29,17 +40,6 @@ const stockSchema = new mongoose_1.default.Schema({
     purchaseDate: {
         type: Date,
         required: true,
-    },
-    exchange: {
-        type: String,
-        enum: ["NSE", "BSE"],
-        default: "NSE",
-    },
-    symbol: {
-        type: String,
-        required: true,
-        trim: true,
-        uppercase: true,
     },
     notes: {
         type: String,

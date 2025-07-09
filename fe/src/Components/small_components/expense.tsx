@@ -34,6 +34,7 @@ export default function Expense() {
     toWhom: "",
   });
 
+  // Data Fecthing
   useEffect(() => {
     const fetchData = async () => {
       const token = localStorage.getItem("token");
@@ -75,8 +76,9 @@ export default function Expense() {
       }
     };
     fetchData();
-  },[]);
+  }, []);
 
+  // Add transaction
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const token = localStorage.getItem("token");
@@ -85,8 +87,8 @@ export default function Expense() {
       return;
     }
     const parsedAmount = parseFloat(form.amount);
-    if(isNaN(parsedAmount) || parsedAmount <= 0){
-      alert(`Please enter a valid amount`)
+    if (isNaN(parsedAmount) || parsedAmount <= 0) {
+      alert(`Please enter a valid amount`);
       return;
     }
 
@@ -113,10 +115,10 @@ export default function Expense() {
       });
 
       const result = await res.json();
-      if(!res.ok){
+      if (!res.ok) {
         throw new Error(result.message || `Failed to post transaction`);
       }
-      setTransactions((prev) => [result.transaction, ...prev.slice(0,29)]);
+      setTransactions((prev) => [result.transaction, ...prev.slice(0, 29)]);
       setForm({
         type: "Income",
         amount: "",
@@ -126,11 +128,44 @@ export default function Expense() {
       });
       setselectedAccountId("");
       setShowSheet(false);
+      window.location.reload();
     } catch (error) {
       console.error("Error posting transaction:", error);
       alert("Failed to post transaction");
     }
+  };
 
+  const handleDelete = async (txId: string) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert(`Token missing`);
+    }
+    const confirmed = window.confirm(
+      `Are you sure you want to delete this transaction?`
+    );
+    if (!confirmed) {
+      return;
+    }
+    try {
+      const res = await fetch(
+        `http://localhost:3001/api/trans/delete-trans/${txId}`,
+        {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const result = await res.json();
+      if(!res.ok){
+        throw new Error(result.message || `Failed to delete transactions`);
+      }
+      setTransactions((prev) => prev.filter((tx) => tx._id !== txId));
+      window.location.reload()
+      alert(`Transaction deleted and account balance updated`)
+    } catch (error) {
+      console.log(`Error deleting transaction`, error)
+    }
   };
 
   return (
@@ -264,7 +299,7 @@ export default function Expense() {
                   ₹ {tx.amount}
                 </span>
                 <button
-                  className="text-gray-400 hover:text-red-500 transition duration-200"
+                  onClick={() => handleDelete(tx._id)}
                   title="Delete transaction"
                 >
                   <DeleteIcon />

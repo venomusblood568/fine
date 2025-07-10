@@ -25,7 +25,7 @@ export const delete_account = async (
 
     res.status(200).json({ message: "Account deleted successfully" });
   } catch (error) {
-    console.error("Error in delete_account:", error);
+    console.error("Error in deleting account:", error);
     res.status(500).json({ message: "Server error" });
   }
 };

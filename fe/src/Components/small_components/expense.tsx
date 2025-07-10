@@ -168,6 +168,58 @@ export default function Expense() {
     }
   };
 
+  //date
+  const formatRelativeDate = (dateStr: string) => {
+    const txDate = new Date(dateStr);
+    const now = new Date();
+
+    const isSameDay = (d1: Date, d2: Date) =>
+      d1.getDate() === d2.getDate() &&
+      d1.getMonth() === d2.getMonth() &&
+      d1.getFullYear() === d2.getFullYear();
+
+    const yesterday = new Date(now);
+    yesterday.setDate(now.getDate() - 1);
+
+    if (isSameDay(txDate, now)) return "Today";
+    if (isSameDay(txDate, yesterday)) return "Yesterday";
+
+    return txDate.toLocaleString("en-US", {
+      dateStyle: "medium",
+      timeStyle: "short",
+    });
+  };
+  
+  const groupTransactionsByDate = (transactions: TransactionType[]) => {
+    const grouped: Record<string, TransactionType[]> = {};
+
+    const now = new Date();
+    const yesterday = new Date();
+    yesterday.setDate(now.getDate() - 1);
+
+    const formatKey = (dateStr: string) => {
+      const d = new Date(dateStr);
+      const isSameDay = (d1: Date, d2: Date) =>
+        d1.getDate() === d2.getDate() &&
+        d1.getMonth() === d2.getMonth() &&
+        d1.getFullYear() === d2.getFullYear();
+
+      if (isSameDay(d, now)) return "Today";
+      if (isSameDay(d, yesterday)) return "Yesterday";
+
+      return d.toLocaleDateString("en-US", { dateStyle: "medium" });
+    };
+
+    transactions.forEach((tx) => {
+      const key = formatKey(tx.date);
+      if (!grouped[key]) grouped[key] = [];
+      grouped[key].push(tx);
+    });
+
+    return grouped;
+  };
+  
+
   return (
     <div className="lg:col-span-5 bg-white/10 rounded-2xl p-4 col-span-1 shadow-sm backdrop-blur-sm h-172 overflow-y-auto">
       {/* Header Row */}
@@ -271,42 +323,56 @@ export default function Expense() {
         ) : transactions.length === 0 ? (
           <p>No transactions found.</p>
         ) : (
-          transactions.map((tx) => (
-            <div
-              key={tx._id}
-              className="flex justify-between border-white/10 pb-2 border-b uppercase"
-            >
-              <div className="space-y-1">
-                <p className="font-semibold text-white">{tx.description}</p>
-                <p className="text-xs text-gray-500">
-                  {new Date(tx.date).toLocaleString("en-US", {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                  })}
+          Object.entries(groupTransactionsByDate(transactions)).map(
+            ([dateLabel, txs]) => (
+              <div key={dateLabel} className="space-y-2">
+                <p className=" text-white font-bold pt-2">
+                  {dateLabel}
                 </p>
-                <p className="text-sm text-gray-500">
-                  {tx.accountId?.accountName}
-                  {tx.toWhom && ` • ${tx.toWhom}`}
-                </p>
-              </div>
+                {txs.map((tx) => (
+                  <div
+                    key={tx._id}
+                    className="flex justify-between border-white/10 border-b uppercase"
+                  >
+                    <div className="space-y-1">
+                      <p className="font-sm text-gray-300">
+                        {tx.description}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        {new Date(tx.date).toLocaleTimeString("en-US", {
+                          hour: "numeric",
+                          minute: "numeric",
+                          hour12: true,
+                        })}
+                      </p>
+                      <p className="text-sm text-gray-500">
+                        {tx.accountId?.accountName}
+                        {tx.toWhom && ` • ${tx.toWhom}`}
+                      </p>
+                    </div>
 
-              <div className="flex flex-col items-end gap-3 pt-1 min-w-[60px]">
-                <span
-                  className={`text-sm ${
-                    tx.type === "Income" ? "text-green-500" : "text-red-500"
-                  }`}
-                >
-                  ₹ {tx.amount}
-                </span>
-                <button
-                  onClick={() => handleDelete(tx._id)}
-                  title="Delete transaction"
-                >
-                  <DeleteIcon />
-                </button>
+                    <div className="flex flex-col items-end gap-3 pt-1 min-w-[60px]">
+                      <span
+                        className={`text-sm ${
+                          tx.type === "Income"
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }`}
+                      >
+                        {tx.type === "Income" ? "+" : "-"} ₹{tx.amount}
+                      </span>
+                      <button
+                        onClick={() => handleDelete(tx._id)}
+                        title="Delete transaction"
+                      >
+                        <DeleteIcon />
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
-            </div>
-          ))
+            )
+          )
         )}
       </div>
     </div>

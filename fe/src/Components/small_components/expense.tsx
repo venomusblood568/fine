@@ -168,28 +168,6 @@ export default function Expense() {
     }
   };
 
-  //date
-  const formatRelativeDate = (dateStr: string) => {
-    const txDate = new Date(dateStr);
-    const now = new Date();
-
-    const isSameDay = (d1: Date, d2: Date) =>
-      d1.getDate() === d2.getDate() &&
-      d1.getMonth() === d2.getMonth() &&
-      d1.getFullYear() === d2.getFullYear();
-
-    const yesterday = new Date(now);
-    yesterday.setDate(now.getDate() - 1);
-
-    if (isSameDay(txDate, now)) return "Today";
-    if (isSameDay(txDate, yesterday)) return "Yesterday";
-
-    return txDate.toLocaleString("en-US", {
-      dateStyle: "medium",
-      timeStyle: "short",
-    });
-  };
-  
   const groupTransactionsByDate = (transactions: TransactionType[]) => {
     const grouped: Record<string, TransactionType[]> = {};
 

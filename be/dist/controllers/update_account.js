@@ -36,7 +36,7 @@ const update_account = (req, res) => __awaiter(void 0, void 0, void 0, function*
         res.status(200).json({ message: "Account updated", account });
     }
     catch (error) {
-        console.error("Error in update_account:", error);
+        console.error("Error in updating account:", error);
         res.status(500).json({ message: "Server Error" });
     }
 });

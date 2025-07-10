@@ -26,7 +26,7 @@ export const update_account = async(req:Request,res:Response):Promise<void> => {
 
 
     } catch (error) {
-        console.error("Error in update_account:", error);
+        console.error("Error in updating account:", error);
         res.status(500).json({ message: "Server Error" });
     }
 }

@@ -54,7 +54,7 @@ export default function StockInfo() {
       {/* Divider */}
       <hr className="border-white/10 mb-2" />
 
-      <div className="text-sm text-gray-300 space-y-2">
+      <div className="text-sm text-gray-300 space-y-2 font-mono">
         {loading ? (
           <p>Loading stocks...</p>
         ) : stocks.length === 0 ? (
@@ -63,20 +63,17 @@ export default function StockInfo() {
           stocks.map((stock) => (
             <div
               key={stock._id}
-              className="flex flex-grow border-b border-white/10 pb-2"
+              className="flex justify-between items-center border-b border-white/10 pb-2"
             >
-              <div className="flex justify-between items-start text-xs">
-                {/* Left: Stock Name - allow wrapping */}
-                <p className="text-white font-medium break-words max-w-[60%]">
-                  {stock.stockName}
-                </p>
+              {/* Stock Name (can wrap) */}
+              <p className="text-white font-medium break-words max-w-[70%]">
+                {stock.stockName}
+              </p>
 
-                {/* Right: Quantity & Date - single line, no wrap */}
-                <div className="text-right whitespace-nowrap text-gray-400 space-x-3">
-                  <span>{stock.quantity} Shares</span>
-                  
-                </div>
-              </div>
+              {/* Quantity aligned right */}
+              <span className="text-xs text-gray-400 whitespace-nowrap">
+                {stock.quantity} Shares
+              </span>
             </div>
           ))
         )}

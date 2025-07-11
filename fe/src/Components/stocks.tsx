@@ -1,5 +1,5 @@
 import CustomBg from "../assets/custom_bg";
-import Sidebar from "../assets/sidebar";
+import Sidebar from "../assets/Sidebar";
 
 export default function Stocks() {
   return (

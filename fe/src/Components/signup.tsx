@@ -25,18 +25,21 @@ export default function Signup() {
   const handleSubmit = async(e: { preventDefault: () => void; }) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3001/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          firstname: firstName,
-          lastname: lastName,
-          username: userName,
-          password: password,
-        }),
-      });
+      const response = await fetch(
+        "https://fine-fwhx.onrender.com/api/auth/signup",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            firstname: firstName,
+            lastname: lastName,
+            username: userName,
+            password: password,
+          }),
+        }
+      );
       const data = await response.json()
       if(response.ok){
         alert("Signup successful!");

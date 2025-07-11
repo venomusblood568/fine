@@ -33,13 +33,16 @@ export default function Account() {
         return;
       }
       try {
-        const res = await fetch("http://localhost:3001/api/acc/accounts", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          "https://fine-fwhx.onrender.com/api/acc/accounts",
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         if (!res.ok) {
           throw new Error(`Fetch failed: ${res.status}`);
         }
@@ -72,14 +75,17 @@ export default function Account() {
       return;
     }
     try {
-      const res = await fetch("http://localhost:3001/api/acc/create-account", {
-        method: "POST",
-        headers: {
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        "https://fine-fwhx.onrender.com/api/acc/create-account",
+        {
+          method: "POST",
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
       const result = await res.json();
       if (!res.ok) {
         throw new Error(result.message || `Account creation failed`);
@@ -108,7 +114,7 @@ export default function Account() {
     }
     try {
       const res = await fetch(
-        `http://localhost:3001/api/acc/delete-account/${axId}`,
+        `https://fine-fwhx.onrender.com/api/acc/delete-account/${axId}`,
         {
           method: "DELETE",
           headers: {
@@ -143,7 +149,7 @@ export default function Account() {
     };
     try {
       const res = await fetch(
-        `http://localhost:3001/api/acc/update-account/${editId}`,
+        `https://fine-fwhx.onrender.com/api/acc/update-account/${editId}`,
         {
           method: "PUT",
           headers: {

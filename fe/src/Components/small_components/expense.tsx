@@ -45,12 +45,12 @@ export default function Expense() {
 
       try {
         const [txRes, accRes] = await Promise.all([
-          fetch("http://localhost:3001/api/trans/get-trans", {
+          fetch("https://fine-fwhx.onrender.com/api/trans/get-trans", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           }),
-          fetch("http://localhost:3001/api/acc/accounts", {
+          fetch("https://fine-fwhx.onrender.com/api/acc/accounts", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
@@ -105,14 +105,17 @@ export default function Expense() {
     };
 
     try {
-      const res = await fetch("http://localhost:3001/api/trans/post-trans", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
+      const res = await fetch(
+        "https://fine-fwhx.onrender.com/api/trans/post-trans",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
 
       const result = await res.json();
       if (!res.ok) {
@@ -148,7 +151,7 @@ export default function Expense() {
     }
     try {
       const res = await fetch(
-        `http://localhost:3001/api/trans/delete-trans/${txId}`,
+        `https://fine-fwhx.onrender.com/api/trans/delete-trans/${txId}`,
         {
           method: "DELETE",
           headers: {

@@ -7,7 +7,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors())
+app.use(
+  cors({
+    origin: [
+      "https://fine-duck.vercel.app/",
+      "fine-p3kaxq0w0-venomusblood568s-projects.vercel.app",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json())
 
 app.use("/api",apiRouter);

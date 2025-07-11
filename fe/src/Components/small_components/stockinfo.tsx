@@ -24,11 +24,14 @@ export default function StockInfo() {
       }
 
       try {
-        const res = await fetch("http://localhost:3001/api/stock/get_stocks", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          "https://fine-fwhx.onrender.com/api/stock/get_stocks",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const data = await res.json();
         if (res.ok && data.stocks) {
           setStocks(data.stocks);

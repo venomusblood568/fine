@@ -34,11 +34,14 @@ export default function WeeklyGraph() {
       if (!token) return;
 
       try {
-        const res = await fetch("http://localhost:3001/api/trans/get-trans", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const res = await fetch(
+          "https://fine-fwhx.onrender.com/api/trans/get-trans",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!res.ok) {
           console.error("Failed to fetch:", res.status);

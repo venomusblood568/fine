@@ -11,11 +11,17 @@ require("./models");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const PORT = process.env.PORT || 3001;
+const allowedOrigins = [
+    "https://fine-duck.vercel.app",
+    "https://fine-23hwalbqe-venomusblood568s-projects.vercel.app",
+];
 app.use((0, cors_1.default)({
-    origin: [
-        "https://fine-duck.vercel.app/",
-        "fine-p3kaxq0w0-venomusblood568s-projects.vercel.app",
-    ],
+    origin: allowedOrigins,
+    credentials: true,
+}));
+// Handle preflight for all routes
+app.options("*", (0, cors_1.default)({
+    origin: allowedOrigins,
     credentials: true,
 }));
 app.use(express_1.default.json());

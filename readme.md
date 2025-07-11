@@ -1,6 +1,6 @@
 # F.I.N.E. – Finance Isn’t Nearly Easy
 
-A personal finance tracker built with Next.js and Tailwind CSS to help you manage your income and expenses effortlessly.
+Track your money, accounts, and stocks with ease. A smart personal finance tool to manage it all.
 
 ---
 
@@ -10,3 +10,7 @@ A personal finance tracker built with Next.js and Tailwind CSS to help you manag
 - React Context API for state management
 - Node.js for backend API (inside Next.js)
 - MongoDB  for database integration
+
+## Hosted On
+- Backend on Render 
+- Frontend on Vercel

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 import { FineIcon } from "./icons/fine";
 import { Popup } from "./Components/popup";
@@ -8,6 +8,36 @@ import Aurora from "./assets/bg_arora";
 function App() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const navigate = useNavigate();
+  const [backendReady, setBackendReady] = useState(false);
+
+  useEffect(() => {
+    const checkbackend = async() => {
+      try {
+        const res = await fetch(
+          "https://fine-fwhx.onrender.com/api/test/health"
+        );
+        if(res.ok){
+          setBackendReady(true);
+        }else{
+          throw new Error("Backend Not Ready");
+        }
+      } catch{
+        setTimeout(checkbackend,3000);
+      }
+    }
+    checkbackend();
+
+  },[])
+
+  if(!backendReady){
+    return (
+      <div className="loading-screen flex flex-col items-center justify-center min-h-screen bg-black text-white">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mb-4"></div>
+        <p>Waking up our sleepy server ... </p>
+        <>almost there!</>
+      </div>
+    );
+  }
 
   return (
     <div

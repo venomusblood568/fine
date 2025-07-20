@@ -13,6 +13,7 @@ app.use(
   cors({
     origin: [
         "https://fine-duck.vercel.app",
+        "http://localhost:5173/",
         "https://fine-23hwalbqe-venomusblood568s-projects.vercel.app",
       ],
     credentials: true,

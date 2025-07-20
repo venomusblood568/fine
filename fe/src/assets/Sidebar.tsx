@@ -1,6 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useTokenExpiryRedirect from "../customhook/expirytoken";
+import type { LucideIcon } from "lucide-react";
+import { LogOut, LayoutDashboard, Landmark, ChartNoAxesCombined, Settings, User } from "lucide-react";
+
+
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
@@ -29,17 +33,18 @@ export default function Sidebar() {
 
         {/* Links */}
         <nav className="flex flex-col space-y-4 text-sm">
-          <SidebarLink label="Dashboard" onclick={() => navigate("/dashboard")}/>
-          <SidebarLink label="Money" onclick={() => navigate("/money")}/>
-          <SidebarLink label="Stocks" onclick={() => navigate("/stocks")}/>
-          <SidebarLink label="Profile" onclick={() => navigate("/profile")}/>
-          <SidebarLink label="Settings" />
+          <SidebarLink icon={LayoutDashboard}  label="Dashboard" onclick={() => navigate("/dashboard")}/>
+          <SidebarLink icon={Landmark} label="Money" onclick={() => navigate("/money")}/>
+          <SidebarLink icon={ChartNoAxesCombined} label="Stocks" onclick={() => navigate("/stocks")}/>
+          <SidebarLink icon={User} label="Profile" onclick={() => navigate("/profile")}/>
+          <SidebarLink icon={Settings} label="Settings" />
         </nav>
 
         {/* Footer */}
         <div className="flex-grow" />
         <div className="hover:text-red-500">
           <SidebarLink 
+            icon={LogOut}
             label="Logout" 
             onclick={() => navigate("/")} 
           />
@@ -52,16 +57,18 @@ export default function Sidebar() {
 type SidebarProp = {
   label: string;
   onclick?: () => void;
+  icon?: LucideIcon;
 };
 
-function SidebarLink({ label, onclick }: SidebarProp) {
+function SidebarLink({ label, onclick, icon: Icon }: SidebarProp) {
   useTokenExpiryRedirect();
   return (
     <button
       onClick={onclick}
-      className="text-left px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors w-full"
+      className="flex items-center space-x-3 text-left px-3 py-2 rounded-lg hover:bg-gray-800 transition-colors w-full"
     >
-      {label}
+      {Icon && <Icon className="w-4 h-4" />}
+      <span>{label}</span>
     </button>
   );
 }

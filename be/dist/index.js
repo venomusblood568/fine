@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 3001;
 app.use((0, cors_1.default)({
     origin: [
         "https://fine-duck.vercel.app",
-        "http://localhost:5173/",
+        "http://localhost:5173",
         "https://fine-23hwalbqe-venomusblood568s-projects.vercel.app",
     ],
     credentials: true,

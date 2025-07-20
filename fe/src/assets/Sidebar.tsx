@@ -32,7 +32,7 @@ export default function Sidebar() {
           <SidebarLink label="Dashboard" onclick={() => navigate("/dashboard")}/>
           <SidebarLink label="Money" onclick={() => navigate("/money")}/>
           <SidebarLink label="Stocks" onclick={() => navigate("/stocks")}/>
-          <SidebarLink label="Profile" />
+          <SidebarLink label="Profile" onclick={() => navigate("/profile")}/>
           <SidebarLink label="Settings" />
         </nav>
 

@@ -9,6 +9,7 @@ import Signup from "./Components/signup.tsx";
 import Dashboard from "./Components/dashboard.tsx";
 import Money from "./Components/money.tsx";
 import Stocks from "./Components/stocks.tsx";
+import ProfilePage from "./Components/profile.tsx";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -20,6 +21,7 @@ createRoot(document.getElementById("root")!).render(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/money" element={<Money/>}/>
         <Route path="/stocks" element={<Stocks/>}/>
+        <Route path="/profile" element = {<ProfilePage/>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>

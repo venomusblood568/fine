@@ -1,18 +1,65 @@
-import { User, Mail, Phone, MapPin, IndianRupee, TrendingUp, CreditCard } from "lucide-react";
+import {
+  User,
+  Phone,
+  MapPin,
+  IndianRupee,
+  TrendingUp,
+  CreditCard,
+  AtSign,
+  Mail,
+} from "lucide-react";
 import CustomBg from "../assets/custom_bg";
 import Sidebar from "../assets/Sidebar";
+import { useEffect, useState } from "react";
 
 export default function ProfilePage() {
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [username, setUsername] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  const fetchInfo = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      setError("Unauthorized: No token found");
+      setLoading(false);
+      return;
+    }
+    try {
+      const res = await fetch(`http://localhost:3000/api/auth/getme`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      if (res.ok && data.user) {
+        setFirstname(data.user.firstname);
+        setLastname(data.user.lastname);
+        setUsername(data.user.username);
+      } else {
+        setError("Something went wrong");
+      }
+
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchInfo();
+  }, []);
+
   return (
-    <div className="bg-black min-h-screen font-mono relative">
+    <div className="bg-black min-h-screen font-sans relative">
       <CustomBg />
       <div className="flex relative z-10">
         <Sidebar />
 
-        {/* Main Content */}
-        <div className="flex-1 px-6 py-15 overflow-y-auto">
+        <div className="flex-1 px-6 py-16 overflow-y-auto">
           <div className="max-w-6xl mx-auto space-y-8">
-            {/* Header */}
             <div className="mb-8">
               <h1 className="text-3xl font-bold text-white mb-2">Profile</h1>
               <p className="text-gray-400">
@@ -20,41 +67,58 @@ export default function ProfilePage() {
               </p>
             </div>
 
-            <div className="backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-6 md:p-8">
-              <div className="flex flex-col md:flex-row items-start md:items-center md:space-x-6 space-y-4 md:space-y-0">
-                <div className="flex-1 w-full">
-                  <h2 className="text-xl sm:text-2xl font-bold text-white mb-2 text-center md:text-left">
-                    John Anderson
-                  </h2>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <div className="flex items-center space-x-3 text-gray-300">
-                      <Mail size={18} className="text-green-400" />
-                      <span>test@gmail.com</span>
+            {loading ? (
+              <p className="text-gray-400">Loading...</p>
+            ) : error ? (
+              <p className="text-red-500">{error}</p>
+            ) : (
+              <div className="backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-6 md:p-8">
+                <div className="flex flex-col md:flex-row items-start md:items-center md:space-x-6 space-y-4 md:space-y-0">
+                  <div className="flex-1 w-full">
+                    <div className="mb-4">
+                      {/* Name */}
+                      <h2 className="text-xl sm:text-2xl font-bold text-white text-center md:text-left">
+                        {firstname} {lastname}
+                      </h2>
+
+                      {/* Username below in small text */}
+                      <div className="flex items-center justify-center md:justify-start space-x-2 text-sm text-gray-400 mt-1">
+                        <AtSign size={14} className="text-green-400" />
+                        <span className="truncate max-w-[200px]">
+                          {username || "N/A"}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center space-x-3 text-gray-300">
-                      <Phone size={18} className="text-green-400" />
-                      <span>0000000000</span>
-                    </div>
-                    <div className="flex items-center space-x-3 text-gray-300">
-                      <MapPin size={18} className="text-green-400" />
-                      <span>New York, NY</span>
-                    </div>
-                    <div className="flex items-center space-x-3 text-gray-300">
-                      <User size={18} className="text-green-400" />
-                      <span>Occupation - Student</span>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                      <div className="flex items-center space-x-3 text-gray-300">
+                        <Mail size={18} className="text-green-400" />
+                        <span>Mail</span>
+                      </div>
+                      <div className="flex items-center space-x-3 text-gray-300">
+                        <Phone size={18} className="text-green-400" />
+                        <span>0000000000</span>
+                      </div>
+                      <div className="flex items-center space-x-3 text-gray-300">
+                        <MapPin size={18} className="text-green-400" />
+                        <span>New York, NY</span>
+                      </div>
+                      <div className="flex items-center space-x-3 text-gray-300">
+                        <User size={18} className="text-green-400" />
+                        <span>Occupation - Student</span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="w-full md:w-auto mt-4 md:mt-0">
-                  <button className="w-full md:w-auto px-4 py-2 bg-white/10 hover:bg-green-700 text-white rounded-lg transition-colors">
-                    Edit Profile
-                  </button>
+                  <div className="w-full md:w-auto mt-4 md:mt-0">
+                    <button className="w-full md:w-auto px-4 py-2 bg-white/10 hover:bg-green-700 text-white rounded-lg transition-colors">
+                      Edit Profile
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
 
-            {/* Quick Stats */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="bg-gray-900/60 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-4">
@@ -63,9 +127,7 @@ export default function ProfilePage() {
                   </div>
                   <span className="text-sm text-gray-400">Total Balance</span>
                 </div>
-                <div className="text-2xl font-bold text-white mb-1">
-                  ₹00000
-                </div>
+                <div className="text-2xl font-bold text-white mb-1">₹00000</div>
                 <div className="text-sm text-green-400">0% this month</div>
               </div>
 

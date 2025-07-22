@@ -63,7 +63,7 @@ export default function ProfilePage() {
         setOccupation(data.user.occupation);
         setUserId(data.user._id);
         setBalance(data.totalWalletBalance);
-        setCard(data.cardCount.length);
+        setCard(data.cardCount);
         console.log(data.cardCount)
         
       } else {
@@ -315,11 +315,13 @@ export default function ProfilePage() {
                   <span className="text-sm text-gray-400">Total Cards</span>
                 </div>
                 <div className="text-2xl font-bold text-white mb-1">
-                  {typeof card === "number" && card > 0 ? (
-                    `${card}`
-                  ) : (
-                    <span className="text-yellow-400">No cards added.</span>
-                  )}
+                  <div className="text-2xl font-bold text-white mb-1">
+                    {card !== null && card > 0 ? (
+                      `${card}`
+                    ) : (
+                      <span className="text-yellow-400">No cards added.</span>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>

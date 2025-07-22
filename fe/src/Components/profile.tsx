@@ -42,7 +42,7 @@ export default function ProfilePage() {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:3000/api/auth/getme`, {
+      const res = await fetch(`https://fine-fwhx.onrender.com/api/auth/getme`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -83,7 +83,7 @@ export default function ProfilePage() {
     }
     try {
       const res = await fetch(
-        `http://localhost:3000/api/auth/updateme/${userId}`,
+        `https://fine-fwhx.onrender.com/api/auth/updateme/${userId}`,
         {
           method: "PUT",
           headers: {

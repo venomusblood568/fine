@@ -224,10 +224,10 @@ export default function Account() {
                     <option value="">Select account type</option>
                     <option value="cash wallet">Cash Wallet</option>
                     <option value="digital wallet">Digital Wallet</option>
-                    <option value="saving account">Saving Account</option>
+                    <option value="savings account">Savings Account</option>
                     <option value="current account">Current Account</option>
                     <option value="credit card">Credit Card</option>
-                    <option value="anvestment account">Investment Account</option>
+                    <option value="investment account">Investment Account</option>
                     <option value="emergency fund">Emergency Fund</option>
                   </select>
                   <input

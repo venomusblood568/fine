@@ -18,14 +18,16 @@ export const getme = async (req: Request, res: Response) => {
     //No of cards
     const cardCount = await Account.countDocuments({
       userId: req.user.id,
-      accountType: { $in: ["Credit Card"] },
+      accountType: {
+        $in: ["credit card", "savings account", "current account"],
+      },
     });
-
+    console.log("[BACKEND] Found cards:", cardCount);
     const includeTypes = [
-      "Cash Wallet",
-      "Digital Wallet",
-      "Savings Account",
-      "Current Account",
+      "cash wallet",
+      "digital wallet",
+      "savings account",
+      "current account",
     ];
 
     const includedAccount = await Account.find({

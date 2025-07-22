@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import {
   User,
   Phone,
@@ -54,6 +54,7 @@ export default function ProfilePage() {
       });
       const data = await res.json();
       if (res.ok && data.user) {
+        console.log("FULL API RESPONSE:", data);
         setFirstname(data.user.firstname);
         setLastname(data.user.lastname);
         setUsername(data.user.username);
@@ -63,8 +64,8 @@ export default function ProfilePage() {
         setOccupation(data.user.occupation);
         setUserId(data.user._id);
         setBalance(data.totalWalletBalance);
-        setCard(data.cardCount);
-        console.log(data.cardCount)
+        setCard(data.cardCount); // Change this line
+        console.log("Card count:", data.cardCount);
         
       } else {
         setError("Something went wrong");
@@ -291,7 +292,17 @@ export default function ProfilePage() {
                   <span className="text-sm text-gray-400">Total Balance</span>
                 </div>
                 <div className="text-2xl font-bold text-white mb-1">
-                  ₹ {balance ?? "Error"}
+                  <div className="text-2xl font-bold text-white mb-1">
+                    {balance !== null ? (
+                      balance > 0 ? (
+                        `  ₹ ${balance}`
+                      ) : (
+                        <span className="text-yellow-400">No Money</span>
+                      )
+                    ) : (
+                      <span className="text-gray-500">Loading...</span>
+                    )}
+                  </div>
                 </div>
               </div>
 
@@ -316,7 +327,9 @@ export default function ProfilePage() {
                 </div>
                 <div className="text-2xl font-bold text-white mb-1">
                   <div className="text-2xl font-bold text-white mb-1">
-                    {card !== null && card > 0 ? (
+                    {card === null ? (
+                      <span className="text-gray-500">Loading...</span>
+                    ) : card > 0 ? (
                       `${card}`
                     ) : (
                       <span className="text-yellow-400">No cards added.</span>

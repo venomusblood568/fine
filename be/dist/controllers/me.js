@@ -30,13 +30,16 @@ const getme = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //No of cards
         const cardCount = yield account_1.default.countDocuments({
             userId: req.user.id,
-            accountType: { $in: ["Credit Card"] },
+            accountType: {
+                $in: ["credit card", "savings account", "current account"],
+            },
         });
+        console.log("[BACKEND] Found cards:", cardCount);
         const includeTypes = [
-            "Cash Wallet",
-            "Digital Wallet",
-            "Savings Account",
-            "Current Account",
+            "cash wallet",
+            "digital wallet",
+            "savings account",
+            "current account",
         ];
         const includedAccount = yield account_1.default.find({
             userId: req.user.id,

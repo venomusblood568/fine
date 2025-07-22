@@ -16,6 +16,10 @@ export default function ProfilePage() {
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
+  const [mail, setMail] = useState("");
+  const [location, setLocation]=  useState("");
+  const [phone,setPhone] = useState("");
+  const [occupation,setOccupation] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -37,6 +41,10 @@ export default function ProfilePage() {
         setFirstname(data.user.firstname);
         setLastname(data.user.lastname);
         setUsername(data.user.username);
+        setMail(data.user.mail);
+        setLocation(data.user.location);
+        setPhone(data.user.phone);
+        setOccupation(data.user.occupation);
       } else {
         setError("Something went wrong");
       }
@@ -93,19 +101,19 @@ export default function ProfilePage() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="flex items-center space-x-3 text-gray-300">
                         <Mail size={18} className="text-green-400" />
-                        <span>Mail</span>
+                        <span>{mail || "N/A"}</span>
                       </div>
                       <div className="flex items-center space-x-3 text-gray-300">
                         <Phone size={18} className="text-green-400" />
-                        <span>0000000000</span>
+                        <span>{phone || "N/A"}</span>
                       </div>
                       <div className="flex items-center space-x-3 text-gray-300">
                         <MapPin size={18} className="text-green-400" />
-                        <span>New York, NY</span>
+                        <span>{location || "N/A"}</span>
                       </div>
                       <div className="flex items-center space-x-3 text-gray-300">
                         <User size={18} className="text-green-400" />
-                        <span>Occupation - Student</span>
+                        <span>Occupation : {occupation || "N/A"}</span>
                       </div>
                     </div>
                   </div>

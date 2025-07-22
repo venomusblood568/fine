@@ -14,18 +14,38 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getme = void 0;
 const user_1 = __importDefault(require("../models/user"));
+const account_1 = __importDefault(require("../models/account"));
 const getme = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         if (!req.user) {
             res.status(401).json({ message: "Unauthorized" });
             return;
         }
+        //User info 
         const user = yield user_1.default.findById(req.user.id).select("-password");
         if (!user) {
             res.status(404).json({ message: "user not found" });
             return;
         }
-        res.status(200).json({ user });
+        //No of cards
+        const cardCount = yield account_1.default.find({
+            userId: req.user.id,
+            accountType: { $in: ["Credit Card"] },
+        });
+        const includeTypes = [
+            "Cash Wallet",
+            "Digital Wallet",
+            "Savings Account",
+            "Current Account",
+        ];
+        const includedAccount = yield account_1.default.find({
+            userId: req.user.id,
+            accountType: { $in: includeTypes },
+        });
+        const totalBalance = includedAccount.reduce((sum, acc) => sum + acc.balance, 0);
+        res
+            .status(200)
+            .json({ user, cardCount, totalWalletBalance: totalBalance });
     }
     catch (error) {
         res.status(500).json({ message: "Server error" });

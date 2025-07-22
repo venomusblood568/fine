@@ -17,7 +17,18 @@ const accountSchema = new mongoose_1.default.Schema({
     },
     accountType: {
         type: String,
-        enum: ["cash", "bank", "wallet", "credit card", "investment", "savings"],
+        enum: [
+            // Physical & Digital Cash
+            "Cash Wallet",
+            "Digital Wallet",
+            // Banking
+            "Savings Account",
+            "Current Account",
+            "Credit Card",
+            // Others
+            "Investment Account",
+            "Emergency Fund"
+        ],
         required: true,
         trim: true,
         lowercase: true,

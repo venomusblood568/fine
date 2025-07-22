@@ -112,9 +112,9 @@ export default function ProfilePage() {
         <Sidebar />
         {showPopup && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center">
-            <div className="bg-white text-black rounded-xl shadow-2xl w-full max-w-lg border border-gray-200">
+            <div className="bg-blue-200 text-black rounded-xl shadow-2xl w-full max-w-lg border border-gray-200">
               {/* Header */}
-              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-300">
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-600">
                 <div>
                   <h2 className="text-2xl font-semibold">Quick Actions</h2>
                   <p className="text-xs">
@@ -220,10 +220,29 @@ export default function ProfilePage() {
                   <div className="flex-1 w-full">
                     <div className="mb-4">
                       {/* Name */}
-                      <h2 className="text-xl sm:text-2xl font-bold text-white text-center md:text-left">
-                        {firstname} {lastname}
-                      </h2>
-
+                      <div className="flex items-center justify-between w-full">
+                        <h2 className="text-xl sm:text-2xl font-bold text-white text-center md:text-left">
+                          {firstname} {lastname}
+                        </h2>
+                        <div className="w-full md:w-auto mt-4 md:mt-0">
+                          <button
+                            onClick={() => {
+                              setFormData({
+                                firstname,
+                                lastname,
+                                mail,
+                                location,
+                                phone,
+                                occupation,
+                              });
+                              setShowPopup(true);
+                            }}
+                            className="w-full md:w-auto px-4 py-2 bg-white/10 hover:bg-blue-700 text-white rounded-lg transition-colors hover:cursor-pointer"
+                          >
+                            Edit Profile
+                          </button>
+                        </div>
+                      </div>
                       {/* Username below in small text */}
                       <div className="flex items-center justify-center md:justify-start space-x-2 text-sm text-gray-400 mt-1">
                         <AtSign size={14} className="text-green-400" />
@@ -252,25 +271,6 @@ export default function ProfilePage() {
                       </div>
                     </div>
                   </div>
-
-                  <div className="w-full md:w-auto mt-4 md:mt-0">
-                    <button
-                      onClick={() => {
-                        setFormData({
-                          firstname,
-                          lastname,
-                          mail,
-                          location,
-                          phone,
-                          occupation,
-                        });
-                        setShowPopup(true);
-                      }}
-                      className="w-full md:w-auto px-4 py-2 bg-white/10 hover:bg-green-700 text-white rounded-lg transition-colors"
-                    >
-                      Edit Profile
-                    </button>
-                  </div>
                 </div>
               </div>
             )}
@@ -284,7 +284,6 @@ export default function ProfilePage() {
                   <span className="text-sm text-gray-400">Total Balance</span>
                 </div>
                 <div className="text-2xl font-bold text-white mb-1">₹00000</div>
-                <div className="text-sm text-green-400">0% this month</div>
               </div>
 
               <div className="bg-gray-900/60 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
@@ -293,11 +292,10 @@ export default function ProfilePage() {
                     <TrendingUp className="text-blue-400" size={24} />
                   </div>
                   <span className="text-sm text-gray-400">
-                    Investment Return
+                    Total Investment
                   </span>
                 </div>
                 <div className="text-2xl font-bold text-white mb-1">0%</div>
-                <div className="text-sm text-blue-400">Last 12 months</div>
               </div>
 
               <div className="bg-gray-900/60 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
@@ -305,10 +303,9 @@ export default function ProfilePage() {
                   <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center">
                     <CreditCard className="text-purple-400" size={24} />
                   </div>
-                  <span className="text-sm text-gray-400">Active Cards</span>
+                  <span className="text-sm text-gray-400">Total Cards</span>
                 </div>
                 <div className="text-2xl font-bold text-white mb-1">0</div>
-                <div className="text-sm text-purple-400">0 Credit, 0 Debit</div>
               </div>
             </div>
           </div>

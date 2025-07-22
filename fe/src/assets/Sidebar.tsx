@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useTokenExpiryRedirect from "../customhook/expirytoken";
 import type { LucideIcon } from "lucide-react";
-import { LogOut, LayoutDashboard, Landmark, ChartNoAxesCombined, Settings, User } from "lucide-react";
+import { LogOut, LayoutDashboard, Landmark, ChartNoAxesCombined, User } from "lucide-react";
 
 
 export default function Sidebar() {
@@ -37,7 +37,7 @@ export default function Sidebar() {
           <SidebarLink icon={Landmark} label="Money" onclick={() => navigate("/money")}/>
           <SidebarLink icon={ChartNoAxesCombined} label="Stocks" onclick={() => navigate("/stocks")}/>
           <SidebarLink icon={User} label="Profile" onclick={() => navigate("/profile")}/>
-          <SidebarLink icon={Settings} label="Settings" />
+          
         </nav>
 
         {/* Footer */}

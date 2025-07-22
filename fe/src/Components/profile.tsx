@@ -93,8 +93,10 @@ export default function ProfilePage() {
           body: JSON.stringify(formData),
         }
       );
-      const data = await res.json();
+      
       if (res.ok) {
+        const data = await res.json();
+        console.log("Update Success:",data)
         setShowPopup(false);
         fetchInfo();
       }

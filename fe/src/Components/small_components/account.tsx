@@ -222,14 +222,14 @@ export default function Account() {
                     className="w-full px-3 py-2 rounded bg-white/10 outline-none"
                   >
                     <option value="">Select account type</option>
-                    <option value="Cash Wallet">Cash Wallet</option>
-                    <option value="Digital Wallet">Digital Wallet</option>
-                    <option value="Saving Account">Saving Account</option>
-                    <option value="Current Account">Current Account</option>
-                    <option value="Debit Card">Debit Card</option>
-                    <option value="Credit Card">Credit Card</option>
-                    <option value="Investment Account">Investment Account</option>
-                    <option value="Emergency Fund">Emergency Fund</option>
+                    <option value="cash wallet">Cash Wallet</option>
+                    <option value="digital wallet">Digital Wallet</option>
+                    <option value="saving account">Saving Account</option>
+                    <option value="current account">Current Account</option>
+                    <option value="debit card">Debit Card</option>
+                    <option value="credit card">Credit Card</option>
+                    <option value="anvestment account">Investment Account</option>
+                    <option value="emergency fund">Emergency Fund</option>
                   </select>
                   <input
                     placeholder="Balance"

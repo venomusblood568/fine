@@ -14,24 +14,20 @@ const accountSchema = new mongoose.Schema(
     },
     accountType: {
       type: String,
-     enum: [
-        // Physical & Digital Cash
-        "Cash Wallet",
-        "Digital Wallet",
-
-        // Banking
-        "Savings Account",
-        "Current Account",
-        "Credit Card",
-
-        // Others
-        "Investment Account",
-        "Emergency Fund"
+      enum: [
+        "cash wallet",
+        "digital wallet",
+        "savings account",
+        "current account",
+        "credit card",
+        "investment account",
+        "emergency fund",
       ],
       required: true,
       trim: true,
       lowercase: true,
     },
+
     balance: {
       type: Number,
       default: 0,

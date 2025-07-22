@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   User,
   Phone,
@@ -7,12 +8,14 @@ import {
   CreditCard,
   AtSign,
   Mail,
+  X
 } from "lucide-react";
 import CustomBg from "../assets/custom_bg";
 import Sidebar from "../assets/Sidebar";
 import { useEffect, useState } from "react";
 
 export default function ProfilePage() {
+  const [userId, setUserId] = useState(null);
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
@@ -22,7 +25,15 @@ export default function ProfilePage() {
   const [occupation,setOccupation] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-
+  const [showPopup, setShowPopup] = useState(false);
+  const [formData, setFormData] = useState({
+    firstname:"",
+    lastname:"",
+    mail:"",
+    occupation:"",
+    phone:"",
+    location:"",
+  })
   const fetchInfo = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -45,6 +56,8 @@ export default function ProfilePage() {
         setLocation(data.user.location);
         setPhone(data.user.phone);
         setOccupation(data.user.occupation);
+        setUserId(data.user._id)
+      
       } else {
         setError("Something went wrong");
       }
@@ -60,11 +73,131 @@ export default function ProfilePage() {
     fetchInfo();
   }, []);
 
+  const handleUpdate = async (
+    e: React.FormEvent<HTMLFormElement>
+  ): Promise<void> => {
+    e.preventDefault();
+    const token = localStorage.getItem("token");
+    if (!token) {
+      console.log(`You are unauthorized...`);
+    }
+    try {
+      const res = await fetch(
+        `http://localhost:3000/api/auth/updateme/${userId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+      const data = await res.json();
+      if (res.ok) {
+        setShowPopup(false);
+        fetchInfo();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
-    <div className="bg-black min-h-screen font-sans relative">
+    <div className="bg-black min-h-screen font-mono relative">
       <CustomBg />
       <div className="flex relative z-10">
         <Sidebar />
+        {showPopup && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center">
+            <div className="bg-white text-black rounded-xl shadow-2xl w-full max-w-lg border border-gray-200">
+              {/* Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-300">
+                <div>
+                  <h2 className="text-2xl font-semibold">Quick Actions</h2>
+                  <p className="text-xs">
+                    Only change what you want to change.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowPopup(false)}
+                  className="w-9 h-9 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center"
+                >
+                  <X size={18} className="text-gray-600" />
+                </button>
+              </div>
+
+              {/* Form */}
+              <form onSubmit={handleUpdate} className="px-6 py-4 space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <input
+                    type="text"
+                    placeholder="First Name"
+                    value={formData.firstname}
+                    onChange={(e) =>
+                      setFormData({ ...formData, firstname: e.target.value })
+                    }
+                    className="input-style border-b-1 border-gray-300"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Last Name"
+                    value={formData.lastname}
+                    onChange={(e) =>
+                      setFormData({ ...formData, lastname: e.target.value })
+                    }
+                    className="input-style border-b-1 border-gray-300"
+                  />
+                  <input
+                    type="email"
+                    placeholder="Mail ID"
+                    value={formData.mail}
+                    onChange={(e) =>
+                      setFormData({ ...formData, mail: e.target.value })
+                    }
+                    className="input-style border-b-1 border-gray-300"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Location"
+                    value={formData.location}
+                    onChange={(e) =>
+                      setFormData({ ...formData, location: e.target.value })
+                    }
+                    className="input-style border-b-1 border-gray-300"
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Phone No."
+                    value={formData.phone}
+                    onChange={(e) =>
+                      setFormData({ ...formData, phone: e.target.value })
+                    }
+                    className="input-style border-b-1 border-gray-300 "
+                  />
+                  <input
+                    type="text"
+                    placeholder="Occupation"
+                    value={formData.occupation}
+                    onChange={(e) =>
+                      setFormData({ ...formData, occupation: e.target.value })
+                    }
+                    className="input-style border-b-1 border-gray-300"
+                  />
+                </div>
+
+                <div className="flex justify-end pt-4">
+                  <button
+                    type="submit"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition"
+                  >
+                    Update Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         <div className="flex-1 px-6 py-16 overflow-y-auto">
           <div className="max-w-6xl mx-auto space-y-8">
@@ -119,7 +252,20 @@ export default function ProfilePage() {
                   </div>
 
                   <div className="w-full md:w-auto mt-4 md:mt-0">
-                    <button className="w-full md:w-auto px-4 py-2 bg-white/10 hover:bg-green-700 text-white rounded-lg transition-colors">
+                    <button
+                      onClick={() => {
+                        setFormData({
+                          firstname,
+                          lastname,
+                          mail,
+                          location,
+                          phone,
+                          occupation,
+                        });
+                        setShowPopup(true);
+                      }}
+                      className="w-full md:w-auto px-4 py-2 bg-white/10 hover:bg-green-700 text-white rounded-lg transition-colors"
+                    >
                       Edit Profile
                     </button>
                   </div>

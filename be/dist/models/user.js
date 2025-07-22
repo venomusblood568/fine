@@ -9,12 +9,28 @@ const UserSchema = new mongoose_1.default.Schema({
     lastname: String,
     username: {
         type: String,
-        unique: true
+        unique: true,
     },
     password: {
         type: String,
-        unique: true
-    }
+        unique: true,
+    },
+    mail: {
+        type: String,
+        default: "",
+    },
+    occupation: {
+        type: String,
+        default: "",
+    },
+    phone: {
+        type: Number,
+        default: "",
+    },
+    location: {
+        type: String,
+        default: "",
+    },
 });
 const User = mongoose_1.default.model("User", UserSchema);
 exports.default = User;

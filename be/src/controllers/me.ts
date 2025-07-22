@@ -16,7 +16,7 @@ export const getme = async (req: Request, res: Response) => {
     }
 
     //No of cards
-    const cardCount = await Account.find({
+    const cardCount = await Account.countDocuments({
       userId: req.user.id,
       accountType: { $in: ["Credit Card"] },
     });

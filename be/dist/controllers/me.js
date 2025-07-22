@@ -28,7 +28,7 @@ const getme = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return;
         }
         //No of cards
-        const cardCount = yield account_1.default.find({
+        const cardCount = yield account_1.default.countDocuments({
             userId: req.user.id,
             accountType: { $in: ["Credit Card"] },
         });

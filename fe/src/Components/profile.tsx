@@ -8,7 +8,7 @@ import {
   CreditCard,
   AtSign,
   Mail,
-  X
+  X,
 } from "lucide-react";
 import CustomBg from "../assets/custom_bg";
 import Sidebar from "../assets/Sidebar";
@@ -20,20 +20,25 @@ export default function ProfilePage() {
   const [lastname, setLastname] = useState("");
   const [username, setUsername] = useState("");
   const [mail, setMail] = useState("");
-  const [location, setLocation]=  useState("");
-  const [phone,setPhone] = useState("");
-  const [occupation,setOccupation] = useState("");
+  const [location, setLocation] = useState("");
+  const [phone, setPhone] = useState("");
+  const [occupation, setOccupation] = useState("");
+  const [balance, setBalance] = useState<number | null>(null);
+  const [card, setCard] = useState<number | null>(null);
+
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false);
+
   const [formData, setFormData] = useState({
-    firstname:"",
-    lastname:"",
-    mail:"",
-    occupation:"",
-    phone:"",
-    location:"",
-  })
+    firstname: "",
+    lastname: "",
+    mail: "",
+    occupation: "",
+    phone: "",
+    location: "",
+  });
   const fetchInfo = async () => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -56,14 +61,16 @@ export default function ProfilePage() {
         setLocation(data.user.location);
         setPhone(data.user.phone);
         setOccupation(data.user.occupation);
-        setUserId(data.user._id)
-      
+        setUserId(data.user._id);
+        setBalance(data.totalWalletBalance);
+        setCard(data.cardCount.length);
+        console.log(data.cardCount)
+        
       } else {
         setError("Something went wrong");
       }
-
     } catch (error) {
-      console.log(error)
+      console.log(error);
     } finally {
       setLoading(false);
     }
@@ -93,10 +100,10 @@ export default function ProfilePage() {
           body: JSON.stringify(formData),
         }
       );
-      
+
       if (res.ok) {
         const data = await res.json();
-        console.log("Update Success:",data)
+        console.log("Update Success:", data);
         setShowPopup(false);
         fetchInfo();
       }
@@ -283,7 +290,9 @@ export default function ProfilePage() {
                   </div>
                   <span className="text-sm text-gray-400">Total Balance</span>
                 </div>
-                <div className="text-2xl font-bold text-white mb-1">₹00000</div>
+                <div className="text-2xl font-bold text-white mb-1">
+                  ₹ {balance ?? "Error"}
+                </div>
               </div>
 
               <div className="bg-gray-900/60 backdrop-blur-sm border border-gray-700 rounded-xl p-6">
@@ -305,7 +314,13 @@ export default function ProfilePage() {
                   </div>
                   <span className="text-sm text-gray-400">Total Cards</span>
                 </div>
-                <div className="text-2xl font-bold text-white mb-1">0</div>
+                <div className="text-2xl font-bold text-white mb-1">
+                  {typeof card === "number" && card > 0 ? (
+                    `${card}`
+                  ) : (
+                    <span className="text-yellow-400">No cards added.</span>
+                  )}
+                </div>
               </div>
             </div>
           </div>

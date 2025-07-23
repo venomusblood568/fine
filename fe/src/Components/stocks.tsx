@@ -11,14 +11,16 @@ import {
   EyeOff,
 } from "lucide-react";
 import { Holdingtable } from "./small_components/holdingTable";
+
 export default function Stocks() {
-  const[showtotal,setShowtotal]= useState(false)
-  const[showCost,setShowCost] = useState(false)
-  const[showTarget,setShowTarget] = useState(false)
+  const [showtotal, setShowtotal] = useState(false);
+  const [showCost, setShowCost] = useState(false);
+
+
   return (
-    <div className="bg-black min-h-screen font-mono flex">
+    <div className="bg-black min-h-screen font-mono flex w-full overflow-x-hidden">
       <CustomBg />
-      <div className="flex h-screen">
+      <div className="flex h-screen w-full overflow-hidden">
         <Sidebar />
 
         <main className="flex-1 px-6 py-15 z-10 overflow-y-auto">
@@ -51,9 +53,10 @@ export default function Stocks() {
               </button>
             </div>
           </div>
-          {/* cards */}
-          <div className="flex  flex-col gap-3">
-            <div className=" border border-gray-800 rounded-xl p-6">
+
+          {/* Cards */}
+          <div className="flex flex-col gap-3">
+            <div className="border border-gray-800 rounded-xl p-6">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2">
                   <span className="text-gray-400 text-2xl">Total Value</span>
@@ -75,20 +78,19 @@ export default function Stocks() {
                 {showtotal ? `3,214` : "••••••"}
               </p>
             </div>
+
             {/* Summary Section */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+            <div className="grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
+              {/* Total Cost */}
               <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-2">
-                  {/* Left part: icon + label */}
                   <div className="flex items-center gap-2">
                     <IndianRupee className="w-5 h-5 text-emerald-400" />
                     <span className="text-gray-400 text-sm">Total Cost</span>
                   </div>
-
-                  {/* Right part: Eye toggle */}
                   <button
                     onClick={() => setShowCost(!showCost)}
-                    className="p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
                   >
                     {showCost ? (
                       <Eye className="w-5 h-5 text-white" />
@@ -97,21 +99,21 @@ export default function Stocks() {
                     )}
                   </button>
                 </div>
-
-                {/* Value */}
                 <p className="text-white text-2xl font-bold">
                   {showCost ? `3,160` : "••••••"}
                 </p>
               </div>
 
+              {/* Gain/Loss */}
               <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-2">
                   <TrendingUp className="w-5 h-5 text-emerald-400" />
                   <span className="text-gray-400 text-sm">Total Gain/Loss</span>
                 </div>
-                <p className="text-white text-2xl font-bold">$000</p>
+                <p className="text-white text-2xl font-bold">₹000</p>
               </div>
 
+              {/* Return % */}
               <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-2">
                   <Percent className="w-5 h-5 text-emerald-400" />
@@ -119,37 +121,11 @@ export default function Stocks() {
                 </div>
                 <p className="text-white text-2xl font-bold">231%</p>
               </div>
-
-              <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
-                <div className="flex items-center justify-between mb-2">
-                  {/* Left part: icon + label */}
-                  <div className="flex items-center gap-2">
-                    <IndianRupee className="w-5 h-5 text-emerald-400" />
-                    <span className="text-gray-400 text-sm">Target Investment</span>
-                  </div>
-
-                  {/* Right part: Eye toggle */}
-                  <button
-                    onClick={() => setShowTarget(!showTarget)}
-                    className="p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
-                  >
-                    {showTarget ? (
-                      <Eye className="w-5 h-5 text-white" />
-                    ) : (
-                      <EyeOff className="w-5 h-5 text-white" />
-                    )}
-                  </button>
-                </div>
-
-                {/* Value */}
-                <p className="text-white text-2xl font-bold">
-                  {showTarget ? `10,000` : "••••••"}
-                </p>
-              </div>
             </div>
           </div>
-          {/*Holdin table*/}
-          <Holdingtable/>
+
+          {/* Holding Table */}
+          <Holdingtable />
         </main>
       </div>
     </div>

@@ -5,23 +5,104 @@ import {
   TrendingUp,
   IndianRupee,
   Percent,
-  Crosshair,
   Plus,
   Eye,
   EyeOff,
+  X
 } from "lucide-react";
 import { Holdingtable } from "./small_components/holdingTable";
 
 export default function Stocks() {
   const [showtotal, setShowtotal] = useState(false);
   const [showCost, setShowCost] = useState(false);
-
+  const [showPopup, setShowPopup] = useState(false);
 
   return (
     <div className="bg-black min-h-screen font-mono flex w-full overflow-x-hidden">
       <CustomBg />
       <div className="flex h-screen w-full overflow-hidden">
         <Sidebar />
+        {showPopup && (
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center">
+            <div className="bg-[#393E46] rounded-xl shadow-2xl w-full max-w-lg border border-gray-200">
+              {/* Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-gray-600">
+                <h2 className="text-2xl font-semibold text-white">
+                  Add Stocks
+                </h2>
+                <button
+                  onClick={() => setShowPopup(false)}
+                  className="w-9 h-9 bg-gray-200 hover:bg-gray-300 rounded-full flex items-center justify-center"
+                >
+                  <X size={18} className="text-gray-600" />
+                </button>
+              </div>
+
+              {/* Form */}
+              <form className="px-6 py-4 space-y-4 text-white">
+                <div className="grid grid-cols-1 gap-4">
+                  <input
+                    type="text"
+                    placeholder="Stock Name"
+                    className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
+                  />
+                  <input
+                    type="text"
+                    placeholder="Symbol"
+                    className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
+                  />
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <select
+                      className="input-style border-b border-gray-300 bg-transparent text-white"
+                      defaultValue=""
+                    >
+                      <option value="" disabled className="text-gray-400">
+                        Select Exchange
+                      </option>
+                      <option value="NSE" className="text-black">
+                        NSE
+                      </option>
+                      <option value="BSE" className="text-black">
+                        BSE
+                      </option>
+                    </select>
+
+                    <input
+                      type="number"
+                      placeholder="Quantity"
+                      className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
+                    />
+                    <input
+                      type="number"
+                      placeholder="Invested"
+                      className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
+                    />
+                    <input
+                      type="date"
+                      className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
+                    />
+                  </div>
+
+                  <input
+                    type="text"
+                    placeholder="Notes"
+                    className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
+                  />
+                </div>
+
+                <div className="flex justify-end pt-4">
+                  <button
+                    type="submit"
+                    className="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg transition"
+                  >
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
 
         <main className="flex-1 px-6 py-15 z-10 overflow-y-auto">
           {/* Header */}
@@ -38,14 +119,7 @@ export default function Stocks() {
             <div className="flex flex-wrap gap-3">
               <button
                 type="button"
-                className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg border border-green-500 text-green-400 hover:bg-green-600 hover:text-white transition"
-              >
-                <Crosshair />
-                Add Target
-              </button>
-
-              <button
-                type="button"
+                onClick={() => setShowPopup(true)}
                 className="cursor-pointer flex items-center gap-2 px-4 py-2 rounded-lg border border-blue-500 text-blue-400 hover:bg-blue-600 hover:text-white transition"
               >
                 <Plus />

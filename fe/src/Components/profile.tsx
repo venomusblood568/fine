@@ -64,9 +64,7 @@ export default function ProfilePage() {
         setOccupation(data.user.occupation);
         setUserId(data.user._id);
         setBalance(data.totalWalletBalance);
-        setCard(data.cardCount); // Change this line
-        console.log("Card count:", data.cardCount);
-        
+        setCard(data.cardCount);
       } else {
         setError("Something went wrong");
       }
@@ -120,7 +118,7 @@ export default function ProfilePage() {
         <Sidebar />
         {showPopup && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center">
-            <div className="bg-blue-200 text-black rounded-xl shadow-2xl w-full max-w-lg border border-gray-200">
+            <div className="bg-[#393E46] text-white rounded-xl shadow-2xl w-full max-w-lg border border-gray-200">
               {/* Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-600">
                 <div>

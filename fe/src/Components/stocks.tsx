@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomBg from "../assets/custom_bg";
 import Sidebar from "../assets/Sidebar";
 import {
@@ -8,36 +8,67 @@ import {
   Plus,
   Eye,
   EyeOff,
-  X
+  X,
 } from "lucide-react";
 
+type Holding = {
+  stockName: string;
+  symbol: string;
+  quantity: number;
+  invested: number;
+  purchaseDate: string;
+  exchange?: string;
+  notes?: string;
+};
+
 export default function Stocks() {
-  const holdings = [
-    {
-      stockName: "Hindustan Unilever Limited",
-      symbol: "HINDUSTAN UNILEVER LIMITED",
-      exchange: "NSE",
-      quantity: 10,
-      invested: 2525,
-      purchaseDate: "2024-06-15T00:00:00.000Z",
-      notes: "Added for defensive exposure in volatile market",
-      currentPrice: "20",
-      allocation:"",
-    },
-  ];
+  const [holdings, setHoldings] = useState<Holding[]>([]);
+  const [loading, setLoading] = useState(true);
   const [showtotal, setShowtotal] = useState(false);
   const [showCost, setShowCost] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+
+  useEffect(() => {
+    const fetchHoldings = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const response = await fetch(
+          `http://localhost:3000/api/stock/get_stocks`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (!response.ok) {
+          throw new Error("Unauthorized for access");
+        }
+
+        const data = await response.json();
+        setHoldings(data.stocks || []);
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching holdings: ", error);
+        setLoading(false);
+      }
+    };
+
+    fetchHoldings();
+  }, []);
 
   return (
     <div className="bg-black min-h-screen font-mono flex w-full overflow-x-hidden">
       <CustomBg />
       <div className="flex h-screen w-full overflow-hidden">
         <Sidebar />
+
         {showPopup && (
           <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center">
             <div className="bg-[#393E46] rounded-xl shadow-2xl w-full max-w-lg border border-gray-200">
-              {/* Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-600">
                 <h2 className="text-2xl font-semibold text-white">
                   Add Stocks
@@ -50,7 +81,6 @@ export default function Stocks() {
                 </button>
               </div>
 
-              {/* Form */}
               <form className="px-6 py-4 space-y-4 text-white">
                 <div className="grid grid-cols-1 gap-4">
                   <input
@@ -63,7 +93,6 @@ export default function Stocks() {
                     placeholder="Symbol"
                     className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
                   />
-
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <select
                       className="input-style border-b border-gray-300 bg-transparent text-white"
@@ -79,7 +108,6 @@ export default function Stocks() {
                         BSE
                       </option>
                     </select>
-
                     <input
                       type="number"
                       placeholder="Quantity"
@@ -95,14 +123,12 @@ export default function Stocks() {
                       className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
                     />
                   </div>
-
                   <input
                     type="text"
                     placeholder="Notes"
                     className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
                   />
                 </div>
-
                 <div className="flex justify-end pt-4">
                   <button
                     type="submit"
@@ -117,7 +143,6 @@ export default function Stocks() {
         )}
 
         <main className="flex-1 px-6 py-15 z-10 overflow-y-auto">
-          {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 pb-6">
             <div>
               <h1 className="text-white text-3xl font-bold mb-1 z-10">
@@ -140,13 +165,11 @@ export default function Stocks() {
             </div>
           </div>
 
-          {/* Cards */}
+          {/* Summary Cards */}
           <div className="flex flex-col gap-3">
             <div className="border border-gray-800 rounded-xl p-6">
               <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-gray-400 text-2xl">Total Value</span>
-                </div>
+                <span className="text-gray-400 text-2xl">Total Value</span>
                 <button
                   onClick={() => setShowtotal(!showtotal)}
                   className="p-2 hover:bg-white/10 rounded-lg transition-colors cursor-pointer"
@@ -158,16 +181,13 @@ export default function Stocks() {
                   )}
                 </button>
               </div>
-
               <p className="flex text-white text-4xl font-bold gap-2">
-                <p className="text-emerald-500">₹ </p>
+                <span className="text-emerald-500">₹</span>
                 {showtotal ? `3,214` : "••••••"}
               </p>
             </div>
 
-            {/* Summary Section */}
             <div className="grid gap-4 sm:gap-6 grid-cols-[repeat(auto-fit,minmax(220px,1fr))]">
-              {/* Total Cost */}
               <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
@@ -190,7 +210,6 @@ export default function Stocks() {
                 </p>
               </div>
 
-              {/* Gain/Loss */}
               <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-2">
                   <TrendingUp className="w-5 h-5 text-emerald-400" />
@@ -199,7 +218,6 @@ export default function Stocks() {
                 <p className="text-white text-2xl font-bold">₹000</p>
               </div>
 
-              {/* Return % */}
               <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
                 <div className="flex items-center gap-3 mb-2">
                   <Percent className="w-5 h-5 text-emerald-400" />
@@ -210,45 +228,41 @@ export default function Stocks() {
             </div>
           </div>
 
+          {/* Holdings Table */}
           <div>
             <h2 className="text-white text-2xl font-bold py-5">Holdings</h2>
 
-            {/* Desktop Table */}
-            <div className="hidden md:block  border border-gray-800 rounded-xl overflow-hidden">
+            <div className="hidden md:block border border-gray-800 rounded-xl overflow-hidden">
               <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead className="bg-gray-800">
-                    <tr>
-                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
-                        Stock Name
-                      </th>
-                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
-                        Symbol
-                      </th>
-                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
-                        Shares
-                      </th>
-                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
-                        Avg Price
-                      </th>
-                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
-                        Current Price
-                      </th>
-
-                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
-                        Last Purchase Date
-                      </th>
-                      
-                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
-                        Notes
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-800">
-                    {holdings.map((holding) => {
-                      return (
+                {loading ? (
+                  <p className="text-white text-center py-6">
+                    Loading your stocks...
+                  </p>
+                ) : (
+                  <table className="w-full">
+                    <thead className="bg-gray-800">
+                      <tr>
+                        {[
+                          "Stock Name",
+                          "Symbol",
+                          "Shares",
+                          "Invested",
+                          "Last Purchase Date",
+                          "Notes",
+                        ].map((head) => (
+                          <th
+                            key={head}
+                            className="text-left text-gray-400 text-sm font-medium px-6 py-4"
+                          >
+                            {head}
+                          </th>
+                        ))}
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-800">
+                      {holdings.map((holding, idx) => (
                         <tr
-                          key={holding.stockName}
+                          key={idx}
                           className="hover:bg-gray-800/50 transition-colors duration-200"
                         >
                           <td className="px-6 py-4 text-white">
@@ -264,15 +278,11 @@ export default function Stocks() {
                               </span>
                             </div>
                           </td>
-
                           <td className="px-6 py-4 text-white">
                             {holding.quantity}
                           </td>
                           <td className="px-6 py-4 text-white">
-                            ${holding.invested}
-                          </td>
-                          <td className="px-6 py-4 text-white">
-                            ${holding.invested}
+                            ₹{holding.invested}
                           </td>
                           <td className="px-6 py-4 text-white">
                             {new Date(holding.purchaseDate).toLocaleDateString(
@@ -284,65 +294,61 @@ export default function Stocks() {
                               }
                             )}
                           </td>
-
                           <td className="px-6 py-4 text-white">
-                            {holding.notes}
+                            {holding.notes || "-"}
                           </td>
                         </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
+                      ))}
+                    </tbody>
+                  </table>
+                )}
               </div>
             </div>
 
-            {/* Mobile Cards */}
-            <div className="md:hidden space-y-4 ">
-              {holdings.map((holding) => {
-                return (
-                  <div
-                    key={holding.symbol}
-                    className="bg-gray-900 border border-gray-800 rounded-xl p-4 space-y-2"
-                  >
-                    <div className="flex justify-between items-center">
-                      <div>
-                        <p className="text-white font-semibold">
-                          {holding.symbol}
-                        </p>
-                        <p className="text-gray-400 text-xs">
-                          {holding.stockName}
-                        </p>
-                      </div>
-                      <span className="text-white text-sm font-medium">
-                        {holding.quantity} shares
-                      </span>
-                    </div>
-
-                    <div className="text-sm text-gray-300">
-                      <p>
-                        Avg Price:{" "}
-                        <span className="text-white">${holding.invested}</span>
+            {/* Mobile View */}
+            <div className="md:hidden space-y-4 mt-4">
+              {holdings.map((holding, idx) => (
+                <div
+                  key={idx}
+                  className="bg-gray-900 border border-gray-800 rounded-xl p-4 space-y-2"
+                >
+                  <div className="flex justify-between items-center">
+                    <div>
+                      <p className="text-white font-semibold">
+                        {holding.symbol}
                       </p>
-                      <p>
-                        Current:{" "}
-                        <span className="text-white">${holding.invested}</span>
+                      <p className="text-gray-400 text-xs">
+                        {holding.stockName}
                       </p>
                     </div>
-
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 bg-gray-700 rounded-full h-2">
-                        <div
-                          className="bg-emerald-500 h-2 rounded-full transition-all duration-300"
-                          style={{ width: `${holding.allocation}%` }}
-                        />
-                      </div>
-                      <span className="text-white text-sm">
-                        {holding.allocation}%
-                      </span>
-                    </div>
+                    <span className="text-white text-sm font-medium">
+                      {holding.quantity} shares
+                    </span>
                   </div>
-                );
-              })}
+                  <p className="text-sm text-gray-300">
+                    Invested:{" "}
+                    <span className="text-white">₹{holding.invested}</span>
+                  </p>
+                  <p className="text-sm text-gray-300">
+                    Date:{" "}
+                    <span className="text-white">
+                      {new Date(holding.purchaseDate).toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "2-digit",
+                          month: "short",
+                          year: "numeric",
+                        }
+                      )}
+                    </span>
+                  </p>
+                  {holding.notes && (
+                    <p className="text-sm text-gray-400">
+                      Notes: {holding.notes}
+                    </p>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </main>

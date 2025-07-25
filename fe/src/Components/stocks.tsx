@@ -10,9 +10,21 @@ import {
   EyeOff,
   X
 } from "lucide-react";
-import { Holdingtable } from "./small_components/holdingTable";
 
 export default function Stocks() {
+  const holdings = [
+    {
+      stockName: "Hindustan Unilever Limited",
+      symbol: "HINDUSTAN UNILEVER LIMITED",
+      exchange: "NSE",
+      quantity: 10,
+      invested: 2525,
+      purchaseDate: "2024-06-15T00:00:00.000Z",
+      notes: "Added for defensive exposure in volatile market",
+      currentPrice: "20",
+      allocation:"",
+    },
+  ];
   const [showtotal, setShowtotal] = useState(false);
   const [showCost, setShowCost] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
@@ -198,8 +210,141 @@ export default function Stocks() {
             </div>
           </div>
 
-          {/* Holding Table */}
-          <Holdingtable />
+          <div>
+            <h2 className="text-white text-2xl font-bold py-5">Holdings</h2>
+
+            {/* Desktop Table */}
+            <div className="hidden md:block  border border-gray-800 rounded-xl overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full">
+                  <thead className="bg-gray-800">
+                    <tr>
+                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
+                        Stock Name
+                      </th>
+                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
+                        Symbol
+                      </th>
+                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
+                        Shares
+                      </th>
+                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
+                        Avg Price
+                      </th>
+                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
+                        Current Price
+                      </th>
+
+                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
+                        Last Purchase Date
+                      </th>
+                      
+                      <th className="text-left text-gray-400 text-sm font-medium px-6 py-4">
+                        Notes
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-800">
+                    {holdings.map((holding) => {
+                      return (
+                        <tr
+                          key={holding.stockName}
+                          className="hover:bg-gray-800/50 transition-colors duration-200"
+                        >
+                          <td className="px-6 py-4 text-white">
+                            {holding.stockName}
+                          </td>
+                          <td className="px-6 py-4 text-white">
+                            <div className="flex flex-col">
+                              <span className="text-sm font-medium text-white">
+                                {holding.symbol}
+                              </span>
+                              <span className="text-xs text-gray-400">
+                                {holding.exchange}
+                              </span>
+                            </div>
+                          </td>
+
+                          <td className="px-6 py-4 text-white">
+                            {holding.quantity}
+                          </td>
+                          <td className="px-6 py-4 text-white">
+                            ${holding.invested}
+                          </td>
+                          <td className="px-6 py-4 text-white">
+                            ${holding.invested}
+                          </td>
+                          <td className="px-6 py-4 text-white">
+                            {new Date(holding.purchaseDate).toLocaleDateString(
+                              "en-GB",
+                              {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                              }
+                            )}
+                          </td>
+
+                          <td className="px-6 py-4 text-white">
+                            {holding.notes}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            {/* Mobile Cards */}
+            <div className="md:hidden space-y-4 ">
+              {holdings.map((holding) => {
+                return (
+                  <div
+                    key={holding.symbol}
+                    className="bg-gray-900 border border-gray-800 rounded-xl p-4 space-y-2"
+                  >
+                    <div className="flex justify-between items-center">
+                      <div>
+                        <p className="text-white font-semibold">
+                          {holding.symbol}
+                        </p>
+                        <p className="text-gray-400 text-xs">
+                          {holding.stockName}
+                        </p>
+                      </div>
+                      <span className="text-white text-sm font-medium">
+                        {holding.quantity} shares
+                      </span>
+                    </div>
+
+                    <div className="text-sm text-gray-300">
+                      <p>
+                        Avg Price:{" "}
+                        <span className="text-white">${holding.invested}</span>
+                      </p>
+                      <p>
+                        Current:{" "}
+                        <span className="text-white">${holding.invested}</span>
+                      </p>
+                    </div>
+
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 bg-gray-700 rounded-full h-2">
+                        <div
+                          className="bg-emerald-500 h-2 rounded-full transition-all duration-300"
+                          style={{ width: `${holding.allocation}%` }}
+                        />
+                      </div>
+                      <span className="text-white text-sm">
+                        {holding.allocation}%
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </main>
       </div>
     </div>

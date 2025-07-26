@@ -11,6 +11,7 @@ import {
   X,
 } from "lucide-react";
 
+
 type Holding = {
   stockName: string;
   symbol: string;
@@ -24,9 +25,33 @@ type Holding = {
 export default function Stocks() {
   const [holdings, setHoldings] = useState<Holding[]>([]);
   const [loading, setLoading] = useState(true);
+
   const [showtotal, setShowtotal] = useState(false);
   const [showCost, setShowCost] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [newStock, setnewStock] = useState({
+    stockName: "",
+    symbol: "",
+    exchange: "",
+    quantity: "",
+    invested: "",
+    purchaseDate: "",
+    notes: "",
+  });
+
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
+    setnewStock((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  
 
   useEffect(() => {
     const fetchHoldings = async () => {
@@ -60,6 +85,52 @@ export default function Stocks() {
     fetchHoldings();
   }, []);
 
+  const handleAddStock = async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    try {
+      const payload = {
+        ...newStock,
+        quantity: Number(newStock.quantity),
+        invested: Number(newStock.invested),
+      };
+
+      const response = await fetch(
+        `http://localhost:3000/api/stock/post_stock`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to add stock: ${errorText}`);
+      }
+
+      const savedStock = await response.json();
+      setHoldings((prev) => [...prev, savedStock.stock]);
+      console.log("✅ Saved to backend:", savedStock);
+      
+      // Reset form
+      setShowPopup(false);
+      setnewStock({
+        stockName: "",
+        symbol: "",
+        exchange: "",
+        quantity: "",
+        invested: "",
+        purchaseDate: "",
+        notes: "",
+      });
+    } catch (error) {
+      console.error("❌ Error adding stock:", error);
+    }
+  };
+
   return (
     <div className="bg-black min-h-screen font-mono flex w-full overflow-x-hidden">
       <CustomBg />
@@ -81,22 +152,33 @@ export default function Stocks() {
                 </button>
               </div>
 
-              <form className="px-6 py-4 space-y-4 text-white">
+              <form
+                onSubmit={handleAddStock}
+                className="px-6 py-4 space-y-4 text-white"
+              >
                 <div className="grid grid-cols-1 gap-4">
                   <input
                     type="text"
+                    name="stockName"
                     placeholder="Stock Name"
+                    value={newStock.stockName}
+                    onChange={handleChange}
                     className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
                   />
                   <input
                     type="text"
+                    name="symbol"
                     placeholder="Symbol"
+                    value={newStock.symbol}
+                    onChange={handleChange}
                     className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
                   />
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <select
+                      name="exchange"
                       className="input-style border-b border-gray-300 bg-transparent text-white"
-                      defaultValue=""
+                      value={newStock.exchange}
+                      onChange={handleChange}
                     >
                       <option value="" disabled className="text-gray-400">
                         Select Exchange
@@ -110,22 +192,34 @@ export default function Stocks() {
                     </select>
                     <input
                       type="number"
+                      name="quantity"
                       placeholder="Quantity"
+                      value={newStock.quantity}
+                      onChange={handleChange}
                       className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
                     />
                     <input
                       type="number"
+                      name="invested"
                       placeholder="Invested"
+                      value={newStock.invested}
+                      onChange={handleChange}
                       className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
                     />
                     <input
                       type="date"
+                      name="purchaseDate"
+                      value={newStock.purchaseDate}
+                      onChange={handleChange}
                       className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
                     />
                   </div>
                   <input
                     type="text"
+                    name="notes"
                     placeholder="Notes"
+                    value={newStock.notes}
+                    onChange={handleChange}
                     className="input-style border-b border-gray-300 placeholder-gray-400 text-white"
                   />
                 </div>

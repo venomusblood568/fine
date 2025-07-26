@@ -29,6 +29,7 @@ export default function Stocks() {
   const [showtotal, setShowtotal] = useState(false);
   const [showCost, setShowCost] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  
   const [newStock, setnewStock] = useState({
     stockName: "",
     symbol: "",
@@ -49,9 +50,7 @@ export default function Stocks() {
       ...prev,
       [name]: value,
     }));
-  };
-
-  
+  }; 
 
   useEffect(() => {
     const fetchHoldings = async () => {
@@ -131,6 +130,10 @@ export default function Stocks() {
     }
   };
 
+  const totalInvested = holdings.reduce(
+    (total,stock) => total + Number(stock.invested || 0),
+    0
+  );
   return (
     <div className="bg-black min-h-screen font-mono flex w-full overflow-x-hidden">
       <CustomBg />
@@ -300,7 +303,7 @@ export default function Stocks() {
                   </button>
                 </div>
                 <p className="text-white text-2xl font-bold">
-                  {showCost ? `3,160` : "••••••"}
+                  {showCost ? `₹ ${totalInvested.toLocaleString("en-IN")}` : "••••••"}
                 </p>
               </div>
 
@@ -376,7 +379,7 @@ export default function Stocks() {
                             {holding.quantity}
                           </td>
                           <td className="px-6 py-4 text-white">
-                            ₹{holding.invested}
+                            ₹ {holding.invested}
                           </td>
                           <td className="px-6 py-4 text-white">
                             {new Date(holding.purchaseDate).toLocaleDateString(

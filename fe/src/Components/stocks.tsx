@@ -15,6 +15,7 @@ import {
 
 
 type Holding = {
+  _id: string;
   stockName: string;
   symbol: string;
   quantity: number;
@@ -32,6 +33,8 @@ export default function Stocks() {
   const [showtotal, setShowtotal] = useState(false);
   const [showCost, setShowCost] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [showConfirm, setshowConfirm] = useState(false);
+  const [stockToDelete, setStockToDelete] = useState<string | null>(null);
 
   const [newStock, setnewStock] = useState({
     stockName: "",
@@ -138,6 +141,26 @@ export default function Stocks() {
     0
   );
   
+  const handleDeleteStock = async(id:string) => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/api/stock/delete_stock/${id}`,{
+          method:"DELETE",
+          headers:{
+            "Content-Type":"application/json",
+            Authorization:`Bearer ${localStorage.getItem("token")}`
+          }
+        });
+
+        if(!response.ok){
+          console.log(`Error while deleting`);
+          return
+        }
+        setHoldings((prev) => prev.filter((stock) => stock._id !== id))
+    } catch (error) {
+      console.log(`Failed to delete Stocks: `,error);
+    }
+  }
 
   return (
     <div className="bg-black min-h-screen font-mono flex w-full overflow-x-hidden">
@@ -240,6 +263,32 @@ export default function Stocks() {
                   </button>
                 </div>
               </form>
+            </div>
+          </div>
+        )}
+        {showConfirm && stockToDelete && (
+          <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+            <div className="bg-gray-900 p-6 rounded-xl shadow-lg text-white w-80 space-y-4">
+              <h3 className="text-lg font-semibold">Confirm Delete</h3>
+              <p>Are you sure you want to delete this stock?</p>
+              <div className="flex justify-between gap-4 pt-2 ">
+                <button
+                  className="text-gray-400 hover:text-white cursor-pointer"
+                  onClick={() => setshowConfirm(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="text-red-500 hover:text-red-700 cursor-pointer"
+                  onClick={async () => {
+                    await handleDeleteStock(stockToDelete);
+                    setshowConfirm(false);
+                    setStockToDelete(null);
+                  }}
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         )}
@@ -388,13 +437,17 @@ export default function Stocks() {
 
                                   setShowPopup(true);
                                 }}
-                                className="text-white hover:text-blue-600"
+                                className="text-white hover:text-blue-600 cursor-pointer"
                                 title="Edit"
                               >
                                 <Pencil size={18} />
                               </button>
                               <button
-                                className="text-white hover:text-red-600"
+                                className="text-white hover:text-red-600 cursor-pointer"
+                                onClick={() => {
+                                  setStockToDelete(holding._id);
+                                  setshowConfirm(true);
+                                }}
                                 title="Delete"
                               >
                                 <Trash2 size={18} />
@@ -474,7 +527,6 @@ export default function Stocks() {
                           <p className="text-gray-400 text-xs">
                             {holding.stockName} • {holding.exchange || "-"}
                           </p>
-
                         </div>
                         <span className="text-white text-sm font-medium">
                           {holding.quantity} shares
@@ -522,7 +574,11 @@ export default function Stocks() {
                           <Pencil size={18} />
                         </button>
                         <button
-                          className="text-red-700"
+                          onClick={() => {
+                            setStockToDelete(holding._id);
+                            setshowConfirm(true);
+                          }}
+                          className="text-red-700 "
                           title="Delete"
                         >
                           <Trash2 size={18} />

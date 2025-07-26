@@ -9,6 +9,8 @@ import {
   Eye,
   EyeOff,
   X,
+  Pencil,
+  Trash2,
 } from "lucide-react";
 
 
@@ -24,12 +26,13 @@ type Holding = {
 
 export default function Stocks() {
   const [holdings, setHoldings] = useState<Holding[]>([]);
+  const [selectedStock, setSelectedStock] = useState<null | Holding>(null);
   const [loading, setLoading] = useState(true);
 
   const [showtotal, setShowtotal] = useState(false);
   const [showCost, setShowCost] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
-  
+
   const [newStock, setnewStock] = useState({
     stockName: "",
     symbol: "",
@@ -134,6 +137,8 @@ export default function Stocks() {
     (total,stock) => total + Number(stock.invested || 0),
     0
   );
+  
+
   return (
     <div className="bg-black min-h-screen font-mono flex w-full overflow-x-hidden">
       <CustomBg />
@@ -303,7 +308,9 @@ export default function Stocks() {
                   </button>
                 </div>
                 <p className="text-white text-2xl font-bold">
-                  {showCost ? `₹ ${totalInvested.toLocaleString("en-IN")}` : "••••••"}
+                  {showCost
+                    ? `₹ ${totalInvested.toLocaleString("en-IN")}`
+                    : "••••••"}
                 </p>
               </div>
 
@@ -312,7 +319,7 @@ export default function Stocks() {
                   <TrendingUp className="w-5 h-5 text-emerald-400" />
                   <span className="text-gray-400 text-sm">Total Gain/Loss</span>
                 </div>
-                <p className="text-white text-2xl font-bold">₹000</p>
+                <p className="text-white text-2xl font-bold">₹ - </p>
               </div>
 
               <div className="bg-gray-900 border border-gray-800 rounded-xl p-6">
@@ -320,7 +327,7 @@ export default function Stocks() {
                   <Percent className="w-5 h-5 text-emerald-400" />
                   <span className="text-gray-400 text-sm">Return %</span>
                 </div>
-                <p className="text-white text-2xl font-bold">231%</p>
+                <p className="text-white text-2xl font-bold">- %</p>
               </div>
             </div>
           </div>
@@ -329,6 +336,7 @@ export default function Stocks() {
           <div>
             <h2 className="text-white text-2xl font-bold py-5">Holdings</h2>
 
+            {/* Desktop View */}
             <div className="hidden md:block border border-gray-800 rounded-xl overflow-hidden">
               <div className="overflow-x-auto">
                 {loading ? (
@@ -340,6 +348,7 @@ export default function Stocks() {
                     <thead className="bg-gray-800">
                       <tr>
                         {[
+                          "Action",
                           "Stock Name",
                           "Symbol",
                           "Shares",
@@ -362,6 +371,36 @@ export default function Stocks() {
                           key={idx}
                           className="hover:bg-gray-800/50 transition-colors duration-200"
                         >
+                          <td className="px-6 py-4 text-white">
+                            <div className="flex gap-4 items-center">
+                              <button
+                                onClick={() => {
+                                  setSelectedStock(holding);
+                                  setnewStock({
+                                    stockName: holding.stockName,
+                                    symbol: holding.symbol,
+                                    exchange: holding.exchange || "",
+                                    quantity: String(holding.quantity),
+                                    invested: String(holding.invested),
+                                    purchaseDate: holding.purchaseDate,
+                                    notes: holding.notes || "",
+                                  });
+
+                                  setShowPopup(true);
+                                }}
+                                className="text-white hover:text-blue-600"
+                                title="Edit"
+                              >
+                                <Pencil size={18} />
+                              </button>
+                              <button
+                                className="text-white hover:text-red-600"
+                                title="Delete"
+                              >
+                                <Trash2 size={18} />
+                              </button>
+                            </div>
+                          </td>
                           <td className="px-6 py-4 text-white">
                             {holding.stockName}
                           </td>
@@ -404,48 +443,93 @@ export default function Stocks() {
 
             {/* Mobile View */}
             <div className="md:hidden space-y-4 mt-4">
-              {holdings.map((holding, idx) => (
-                <div
-                  key={idx}
-                  className="bg-gray-900 border border-gray-800 rounded-xl p-4 space-y-2"
-                >
-                  <div className="flex justify-between items-center">
-                    <div>
-                      <p className="text-white font-semibold">
-                        {holding.symbol}
-                      </p>
-                      <p className="text-gray-400 text-xs">
-                        {holding.stockName}
-                      </p>
+              {loading
+                ? Array.from({ length: 3 }).map((_, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-gray-900 border border-gray-800 rounded-xl p-4 space-y-2 animate-pulse"
+                    >
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <div className="h-4 bg-gray-700 rounded w-24 mb-2"></div>
+                          <div className="h-3 bg-gray-700 rounded w-36"></div>
+                        </div>
+                        <div className="h-4 bg-gray-700 rounded w-16"></div>
+                      </div>
+                      <div className="h-3 bg-gray-700 rounded w-32"></div>
+                      <div className="h-3 bg-gray-700 rounded w-40"></div>
+                      <div className="h-3 bg-gray-700 rounded w-28"></div>
                     </div>
-                    <span className="text-white text-sm font-medium">
-                      {holding.quantity} shares
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-300">
-                    Invested:{" "}
-                    <span className="text-white">₹{holding.invested}</span>
-                  </p>
-                  <p className="text-sm text-gray-300">
-                    Date:{" "}
-                    <span className="text-white">
-                      {new Date(holding.purchaseDate).toLocaleDateString(
-                        "en-GB",
-                        {
-                          day: "2-digit",
-                          month: "short",
-                          year: "numeric",
-                        }
-                      )}
-                    </span>
-                  </p>
-                  {holding.notes && (
-                    <p className="text-sm text-gray-400">
-                      Notes: {holding.notes}
-                    </p>
-                  )}
-                </div>
-              ))}
+                  ))
+                : holdings.map((holding, idx) => (
+                    <div
+                      key={idx}
+                      className="bg-gray-900 border border-gray-800 rounded-xl p-4 space-y-2"
+                    >
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className="text-white font-semibold">
+                            {holding.symbol}
+                          </p>
+                          <p className="text-gray-400 text-xs">
+                            {holding.stockName} • {holding.exchange || "-"}
+                          </p>
+
+                        </div>
+                        <span className="text-white text-sm font-medium">
+                          {holding.quantity} shares
+                        </span>
+                      </div>
+                      <p className="text-sm text-gray-300">
+                        Invested:{" "}
+                        <span className="text-white">₹{holding.invested}</span>
+                      </p>
+                      <p className="text-sm text-gray-300">
+                        Date:{" "}
+                        <span className="text-white">
+                          {new Date(holding.purchaseDate).toLocaleDateString(
+                            "en-GB",
+                            {
+                              day: "2-digit",
+                              month: "short",
+                              year: "numeric",
+                            }
+                          )}
+                        </span>
+                      </p>
+                      <p className="text-sm text-gray-400">
+                        Notes: {holding.notes?.trim() ? holding.notes : "-"}
+                      </p>
+                      <div className="flex justify-end gap-4 pt-2">
+                        <button
+                          onClick={() => {
+                            setSelectedStock(holding);
+                            setnewStock({
+                              stockName: holding.stockName,
+                              symbol: holding.symbol,
+                              exchange: holding.exchange || "",
+                              quantity: String(holding.quantity),
+                              invested: String(holding.invested),
+                              purchaseDate: holding.purchaseDate,
+                              notes: holding.notes || "",
+                            });
+
+                            setShowPopup(true);
+                          }}
+                          className="text-blue-600"
+                          title="Edit"
+                        >
+                          <Pencil size={18} />
+                        </button>
+                        <button
+                          className="text-red-700"
+                          title="Delete"
+                        >
+                          <Trash2 size={18} />
+                        </button>
+                      </div>
+                    </div>
+                  ))}
             </div>
           </div>
         </main>

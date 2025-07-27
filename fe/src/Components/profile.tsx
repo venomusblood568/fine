@@ -1,4 +1,3 @@
-
 import {
   User,
   Phone,
@@ -126,8 +125,8 @@ export default function ProfilePage() {
       <div className="flex relative z-10">
         <Sidebar />
         {showPopup && (
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center">
-            <div className="bg-[#393E46] text-white rounded-xl shadow-2xl w-full max-w-lg border border-gray-200">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-2 sm:p-0">
+            <div className="bg-[#393E46] text-white rounded-xl shadow-2xl w-full max-w-lg border border-gray-200 max-h-[90vh] overflow-y-auto">
               {/* Header */}
               <div className="flex items-center justify-between px-6 py-4 border-b border-gray-600">
                 <div>
@@ -190,7 +189,7 @@ export default function ProfilePage() {
                     onChange={(e) =>
                       setFormData({ ...formData, phone: e.target.value })
                     }
-                    className="input-style border-b-1 border-gray-300 "
+                    className="input-style border-b-1 border-gray-300"
                   />
                   <input
                     type="text"
@@ -230,60 +229,81 @@ export default function ProfilePage() {
             ) : error ? (
               <p className="text-red-500">{error}</p>
             ) : (
-              <div className="backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-6 md:p-8">
-                <div className="flex flex-col md:flex-row items-start md:items-center md:space-x-6 space-y-4 md:space-y-0">
-                  <div className="flex-1 w-full">
-                    <div className="mb-4">
-                      {/* Name */}
-                      <div className="flex items-center justify-between w-full">
-                        <h2 className="text-xl sm:text-2xl font-bold text-white text-center md:text-left">
-                          {firstname} {lastname}
-                        </h2>
-                        <div className="w-full md:w-auto mt-4 md:mt-0">
-                          <button
-                            onClick={() => {
-                              setFormData({
-                                firstname,
-                                lastname,
-                                mail,
-                                location,
-                                phone,
-                                occupation,
-                              });
-                              setShowPopup(true);
-                            }}
-                            className="w-full md:w-auto px-4 py-2 bg-white/10 hover:bg-blue-700 text-white rounded-lg transition-colors hover:cursor-pointer"
-                          >
-                            Edit Profile
-                          </button>
-                        </div>
-                      </div>
-                      {/* Username below in small text */}
-                      <div className="flex items-center justify-center md:justify-start space-x-2 text-sm text-gray-400 mt-1">
-                        <AtSign size={14} className="text-green-400" />
-                        <span className="truncate max-w-[200px]">
-                          {username || "N/A"}
-                        </span>
-                      </div>
+              <div className="backdrop-blur-sm border border-gray-700 rounded-xl p-4 sm:p-6 md:p-8 shadow-lg">
+                <div className="flex flex-col md:flex-row md:items-center md:space-x-6">
+                  {/* Main content */}
+                  <div className="flex-1 w-full space-y-4">
+                    {/* Name & Edit (desktop only) */}
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                      <h2 className="text-xl sm:text-2xl font-bold text-white text-center sm:text-left">
+                        {firstname} {lastname}
+                      </h2>
+
+                      {/* Edit Button for desktop */}
+                      <button
+                        onClick={() => {
+                          setFormData({
+                            firstname,
+                            lastname,
+                            mail,
+                            location,
+                            phone,
+                            occupation,
+                          });
+                          setShowPopup(true);
+                        }}
+                        className="hidden sm:block px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all"
+                      >
+                        Edit Profile
+                      </button>
                     </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div className="flex items-center space-x-3 text-gray-300">
+                    {/* Username */}
+                    <div className="flex items-center justify-center sm:justify-start space-x-2 text-sm text-gray-400">
+                      <AtSign size={14} className="text-green-400" />
+                      <span className="truncate max-w-[200px]">
+                        {username || "N/A"}
+                      </span>
+                    </div>
+
+                    {/* Info grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm text-gray-300 pt-2">
+                      <div className="flex items-center gap-3">
                         <Mail size={18} className="text-green-400" />
                         <span>{mail || "N/A"}</span>
                       </div>
-                      <div className="flex items-center space-x-3 text-gray-300">
+                      <div className="flex items-center gap-3">
                         <Phone size={18} className="text-green-400" />
                         <span>{phone || "N/A"}</span>
                       </div>
-                      <div className="flex items-center space-x-3 text-gray-300">
+                      <div className="flex items-center gap-3">
                         <MapPin size={18} className="text-green-400" />
                         <span>{location || "N/A"}</span>
                       </div>
-                      <div className="flex items-center space-x-3 text-gray-300">
+                      <div className="flex items-center gap-3">
                         <User size={18} className="text-green-400" />
-                        <span>Occupation : {occupation || "N/A"}</span>
+                        <span>Occupation: {occupation || "N/A"}</span>
                       </div>
+                    </div>
+
+                    {/* Mobile Edit Button */}
+                    <div className="sm:hidden pt-2">
+                      <button
+                        onClick={() => {
+                          setFormData({
+                            firstname,
+                            lastname,
+                            mail,
+                            location,
+                            phone,
+                            occupation,
+                          });
+                          setShowPopup(true);
+                        }}
+                        className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-all"
+                      >
+                        Edit Profile
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -322,7 +342,7 @@ export default function ProfilePage() {
                     Total Investment
                   </span>
                 </div>
-                
+
                 <div className="text-2xl font-bold text-white mb-1">
                   {totalInvestment !== null ? (
                     totalInvestment > 0 ? (

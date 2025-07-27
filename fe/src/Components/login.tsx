@@ -12,7 +12,7 @@ export default function Login() {
   const redirecthome = () => navigate("/");
   const redirectsignup = () => navigate("/signup");
 
-  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
       const response = await fetch(
@@ -45,6 +45,7 @@ export default function Login() {
 
   return (
     <div style={{ fontFamily: "'Space Mono', monospace" }}>
+      {/* Aurora BG */}
       <div className="absolute bg-black inset-0 z-0">
         <Aurora
           colorStops={["#3A29FF", "#2ded40", "#3a29ff"]}
@@ -53,20 +54,24 @@ export default function Login() {
           speed={0.6}
         />
       </div>
-      <div className="text-white min-h-screen flex items-center justify-center">
-        <div className="border border-gray-600 bg-black/30 backdrop-blur p-6 rounded-xl shadow-lg w-full max-w-md">
-          <h1 className="text-4xl font-bold tracking-wider mb-4 text-center">
+
+      {/* Main container */}
+      <div className="text-white min-h-screen flex items-center justify-center px-4">
+        <div className="w-full max-w-md bg-black/30 backdrop-blur border border-gray-600 p-6 sm:p-8 rounded-2xl shadow-lg">
+          <h1 className="text-3xl sm:text-4xl font-bold tracking-wider mb-6 text-center">
             Login
           </h1>
-          <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+
+          <form className="flex flex-col gap-5" onSubmit={handleSubmit}>
             <input
               type="text"
               id="username"
               placeholder="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className="bg-transparent border border-gray-500 px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-white"
+              className="bg-transparent border border-gray-500 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white placeholder:text-gray-400"
             />
+
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -74,34 +79,36 @@ export default function Login() {
                 placeholder="Password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="bg-transparent border border-gray-500 px-3 py-2 w-full rounded-md focus:outline-none focus:ring-2 focus:ring-white"
+                className="bg-transparent border border-gray-500 px-4 py-2 w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-white placeholder:text-gray-400"
               />
               <button
                 type="button"
                 onClick={togglePassword}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-sm text-gray-400 hover:text-white focus:outline-none"
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-sm text-gray-400 hover:text-white"
               >
                 {showPassword ? "Hide" : "Show"}
               </button>
             </div>
+
             <button
               type="submit"
-              className="mt-4 bg-primary hover:bg-gray-700 text-white py-2 rounded-md font-semibold transition-colors cursor-pointer"
+              className="bg-violet-600 hover:bg-violet-700 text-white font-semibold py-2 rounded-lg transition-colors"
             >
               Submit
             </button>
-            <div className="flex w-full gap-3 rounded-xl">
+
+            <div className="flex gap-4 mt-4">
               <button
                 onClick={redirecthome}
                 type="button"
-                className="w-1/2 mt-4 bg-secondary hover:bg-gray-900 text-white py-2 rounded-l-md font-semibold transition-colors cursor-pointer"
+                className="w-1/2 bg-gray-800 hover:bg-gray-900 text-white py-2 rounded-lg font-medium"
               >
                 Home
               </button>
               <button
-                type="button"
                 onClick={redirectsignup}
-                className="w-1/2 mt-4 bg-secondary hover:bg-gray-900 text-white py-2 rounded-r-md font-semibold transition-colors"
+                type="button"
+                className="w-1/2 bg-blue-700 hover:bg-blue-800 text-white py-2 rounded-lg font-medium"
               >
                 Sign Up
               </button>

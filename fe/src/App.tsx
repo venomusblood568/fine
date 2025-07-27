@@ -3,7 +3,8 @@ import "./App.css";
 import { FineIcon } from "./icons/fine";
 import { Popup } from "./Components/popup";
 import { useNavigate } from "react-router-dom";
-import Aurora from "./assets/bg_arora"; 
+import Aurora from "./assets/bg_arora";
+import { motion } from "framer-motion";
 
 function App() {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -11,39 +12,77 @@ function App() {
   const [backendReady, setBackendReady] = useState(false);
 
   useEffect(() => {
-    const checkbackend = async() => {
+    const checkbackend = async () => {
       try {
         const res = await fetch(
           "https://fine-fwhx.onrender.com/api/test/health"
         );
-        if(res.ok){
+        if (res.ok) {
           setBackendReady(true);
-        }else{
+        } else {
           throw new Error("Backend Not Ready");
         }
-      } catch{
-        setTimeout(checkbackend,3000);
+      } catch {
+        setTimeout(checkbackend, 3000);
       }
-    }
+    };
     checkbackend();
+  }, []);
 
-  },[])
-
-  if(!backendReady){
+  if (!backendReady) {
     return (
       <div className="loading-screen flex flex-col items-center justify-center min-h-screen bg-black text-white">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-white mb-4"></div>
-        <p>Waking up our sleepy server ... </p>
-        <>almost there!</>
+        <motion.div
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.5 }}
+          className="mb-8"
+        >
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            className="rounded-full h-16 w-16 border-4 border-transparent border-t-white border-r-blue-400"
+          />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-center"
+        >
+          <p className="text-lg mb-2">Waking up our sleepy server...</p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.8 }}
+            className="text-sm text-gray-400"
+          >
+            Almost there! ✨
+          </motion.p>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.6, delay: 1 }}
+          className="flex space-x-1 mt-4"
+        >
+          {[0, 1, 2].map((i) => (
+            <motion.div
+              key={i}
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 0.6, repeat: Infinity, delay: i * 0.2 }}
+              className="w-2 h-2 bg-white rounded-full"
+            />
+          ))}
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div
-      className="relative bg-black text-white min-h-screen"
-      style={{ fontFamily: "'Space Mono', monospace" }}
-    >
+    <div className="relative bg-black text-white min-h-screen font-spacemono">
       <div className="absolute inset-0 z-0">
         <Aurora
           colorStops={["#3A29FF", "#2ded40", "#3a29ff"]}
@@ -52,54 +91,84 @@ function App() {
           speed={0.6}
         />
       </div>
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4">
-        <h1 className="text-5xl md:text-6xl font-bold tracking-wider mb-4">
+
+      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 text-center">
+        <h1 className="text-4xl sm:text-6xl font-bold tracking-wider mb-4">
           F.I.N.E
         </h1>
-        <p className="text-lg font-extralight md:text-xl text-gray-400">
-          <span className="typewriter font-spacemono text-white text-xl">
-            Finance Isn’t Nearly Easy
+        <p className="text-base sm:text-xl text-gray-400 mb-6">
+          <span className="typewriter text-white">
+            Finance Isn't Nearly Easy
           </span>
         </p>
-        <div className="flex gap-8">
+
+        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
           <button
             onClick={() => navigate("/signup")}
-            className="mt-6 px-6 py-2 rounded-2xl bg-white text-black font-semibold hover:bg-gray-300 transition duration-300 hover:cursor-pointer"
+            className="px-6 py-2 w-full sm:w-auto bg-white text-black font-semibold rounded-xl hover:bg-gray-300 transition"
           >
             Signup
           </button>
           <button
             onClick={() => navigate("/login")}
-            className="mt-6 px-6 py-2 rounded-2xl bg-white text-black font-semibold hover:bg-gray-300 transition duration-300 hover:cursor-pointer"
+            className="px-6 py-2 w-full sm:w-auto bg-white text-black font-semibold rounded-xl hover:bg-gray-300 transition"
           >
             Login
           </button>
         </div>
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.8, delay: 1 }}
+          className="mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full max-w-5xl px-2"
+        >
+          {[
+            { title: "Smart Tracking", desc: "Monitor expenses effortlessly" },
+            {
+              title: "Budget Goals",
+              desc: "Set and achieve financial targets",
+            },
+            { title: "Insights", desc: "Understand your spending patterns" },
+          ].map((feature, idx) => (
+            <motion.div
+              key={feature.title}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 1.2 + idx * 0.1 }}
+              whileHover={{ y: -5 }}
+              className="p-6 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md text-left hover:bg-white/10 transition"
+            >
+              <h3 className="text-lg font-semibold mb-2 text-white">
+                {feature.title}
+              </h3>
+              <p className="text-sm text-gray-300">{feature.desc}</p>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
 
       {/* Floating Icon */}
       <div
         onClick={() => setIsPopupOpen(true)}
-        className="fixed bottom-6 left-6 text-white p-2 rounded-full shadow-xl hover:bg-black transition-all hover:cursor-pointer z-20"
+        className="fixed bottom-6 left-6 p-2 bg-black/60 rounded-full hover:bg-black transition-all cursor-pointer z-20"
       >
         <FineIcon />
       </div>
 
       {/* Popup Component */}
       <Popup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)}>
-        <h2>Hi, Sam this side 👋</h2>
-        <br />
-        <p>
+        <h2 className="text-lg font-bold">Hi, Sam this side 👋</h2>
+        <p className="mt-4 text-sm">
           This is one of my projects built to help me manage my funds better. I
           hope you find it helpful too!
         </p>
-        <br />
-        <div className="flex items-center justify-center gap-2.5">
+        <div className="mt-4 flex flex-col sm:flex-row items-center justify-center gap-2.5">
           <a
             href="https://gourav-duck.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
-            className="border-red-500 rounded-2xl border-2 px-4 py-2 text-white hover:text-black transition duration-300"
+            className="border-red-500 border-2 px-4 py-2 rounded-xl text-white hover:text-black hover:bg-red-500 transition"
           >
             Portfolio
           </a>
@@ -107,7 +176,7 @@ function App() {
             href="https://github.com/venomusblood568"
             target="_blank"
             rel="noopener noreferrer"
-            className="border-blue-500 rounded-2xl border-2 px-4 py-2 text-white hover:text-black transition duration-300"
+            className="border-blue-500 border-2 px-4 py-2 rounded-xl text-white hover:text-black hover:bg-blue-500 transition"
           >
             GitHub
           </a>
@@ -115,7 +184,7 @@ function App() {
             href="https://www.linkedin.com/in/gourav-anand-jha/"
             target="_blank"
             rel="noopener noreferrer"
-            className="border-yellow-500 rounded-2xl border-2 px-4 py-2 text-white hover:text-black transition duration-300"
+            className="border-yellow-500 border-2 px-4 py-2 rounded-xl text-white hover:text-black hover:bg-yellow-500 transition"
           >
             LinkedIn
           </a>

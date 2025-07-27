@@ -8,7 +8,10 @@ import { LogOut, LayoutDashboard, Landmark, ChartNoAxesCombined, User } from "lu
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-
+  const handleLogout = () => {
+    localStorage.clear()
+    navigate("/")
+  }
   return (
     <>
       {/* Hamburger for Mobile */}
@@ -46,7 +49,7 @@ export default function Sidebar() {
           <SidebarLink 
             icon={LogOut}
             label="Logout" 
-            onclick={() => navigate("/")} 
+            onclick={handleLogout} 
           />
         </div>
       </div>

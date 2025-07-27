@@ -141,6 +141,10 @@ export default function Stocks() {
     0
   );
   
+  useEffect(() => {
+    localStorage.setItem("totalInvestment",JSON.stringify(totalInvested));
+  },[totalInvested])
+
   const handleDeleteStock = async(id:string) => {
     try {
       const response = await fetch(
@@ -334,7 +338,7 @@ export default function Stocks() {
               </div>
               <p className="flex text-white text-4xl font-bold gap-2">
                 <span className="text-emerald-500">₹</span>
-                {showtotal ? `3,214` : "••••••"}
+                {showtotal ? `-` : "••••••"}
               </p>
             </div>
 

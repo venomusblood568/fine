@@ -30,6 +30,8 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [showPopup, setShowPopup] = useState(false);
+  const [totalInvestment, setTotalInvestment] = useState(0);
+
 
   const [formData, setFormData] = useState({
     firstname: "",
@@ -110,6 +112,13 @@ export default function ProfilePage() {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    const storedValue = localStorage.getItem("totalInvestment");
+    if(storedValue){
+      setTotalInvestment(JSON.parse(storedValue));
+    }
+  },[])
 
   return (
     <div className="bg-black min-h-screen font-mono relative">
@@ -313,7 +322,18 @@ export default function ProfilePage() {
                     Total Investment
                   </span>
                 </div>
-                <div className="text-2xl font-bold text-white mb-1">0%</div>
+                
+                <div className="text-2xl font-bold text-white mb-1">
+                  {totalInvestment !== null ? (
+                    totalInvestment > 0 ? (
+                      `  ₹ ${totalInvestment}`
+                    ) : (
+                      <span className="text-yellow-400">No Investment</span>
+                    )
+                  ) : (
+                    <span className="text-gray-500">Loading...</span>
+                  )}
+                </div>
               </div>
 
               <div className="bg-gray-900/60 backdrop-blur-sm border border-gray-700 rounded-xl p-6">

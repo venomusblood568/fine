@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 
 
+
 type Holding = {
   _id: string;
   stockName: string;
@@ -63,7 +64,7 @@ export default function Stocks() {
       const token = localStorage.getItem("token");
       try {
         const response = await fetch(
-          `http://localhost:3000/api/stock/get_stocks`,
+          `https://fine-fwhx.onrender.com/api/stock/get_stocks`,
           {
             method: "GET",
             headers: {
@@ -100,7 +101,7 @@ export default function Stocks() {
       };
 
       const response = await fetch(
-        `http://localhost:3000/api/stock/post_stock`,
+        `https://fine-fwhx.onrender.com/api/stock/post_stock`,
         {
           method: "POST",
           headers: {
@@ -148,13 +149,15 @@ export default function Stocks() {
   const handleDeleteStock = async(id:string) => {
     try {
       const response = await fetch(
-        `http://localhost:3000/api/stock/delete_stock/${id}`,{
-          method:"DELETE",
-          headers:{
-            "Content-Type":"application/json",
-            Authorization:`Bearer ${localStorage.getItem("token")}`
-          }
-        });
+        `https://fine-fwhx.onrender.com/api/stock/delete_stock/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
 
         if(!response.ok){
           console.log(`Error while deleting`);
@@ -166,6 +169,61 @@ export default function Stocks() {
     }
   }
 
+  const handleUpdateStock = async(e? : React.FormEvent) => {
+    e?.preventDefault();
+    if(!selectedStock) return
+    try {
+      const payload = {
+        ...newStock,
+        stockName: String(newStock.stockName),
+        symbol: String(newStock.symbol),
+        exchange: String(newStock.exchange),
+        quantity: Number(newStock.quantity),
+        invested: Number(newStock.invested),
+        purchaseDate: newStock.purchaseDate
+          ? new Date(newStock.purchaseDate)
+          : undefined,
+        notes: String(newStock.notes),
+      };
+
+      const response = await fetch(
+        `https://fine-fwhx.onrender.com/api/stock/update_stock/${selectedStock._id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if(!response.ok){
+        console.log(`response.ok failed`)
+      }
+
+      const update = await response.json()
+      setHoldings((prev) =>
+        prev.map((stock) =>
+          stock._id === selectedStock._id ? update.stock : stock
+        )
+      );
+      setShowPopup(false);
+      setSelectedStock(null);
+      setnewStock({
+        stockName: "",
+        symbol: "",
+        exchange: "",
+        quantity: "",
+        invested: "",
+        purchaseDate: "",
+        notes: "",
+      });
+      console.log("✅ Stock updated:", update);
+    } catch (error) {
+      console.log(`Error while updating`, error)
+    }
+  }
   return (
     <div className="bg-black min-h-screen font-mono flex w-full overflow-x-hidden">
       <CustomBg />
@@ -188,7 +246,7 @@ export default function Stocks() {
               </div>
 
               <form
-                onSubmit={handleAddStock}
+                onSubmit={selectedStock ? handleUpdateStock : handleAddStock}
                 className="px-6 py-4 space-y-4 text-white"
               >
                 <div className="grid grid-cols-1 gap-4">
@@ -438,8 +496,7 @@ export default function Stocks() {
                                     purchaseDate: holding.purchaseDate,
                                     notes: holding.notes || "",
                                   });
-
-                                  setShowPopup(true);
+                                  setShowPopup(true); 
                                 }}
                                 className="text-white hover:text-blue-600 cursor-pointer"
                                 title="Edit"
@@ -569,7 +626,6 @@ export default function Stocks() {
                               purchaseDate: holding.purchaseDate,
                               notes: holding.notes || "",
                             });
-
                             setShowPopup(true);
                           }}
                           className="text-blue-600"

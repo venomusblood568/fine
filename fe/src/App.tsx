@@ -38,11 +38,7 @@ function App() {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <motion.div
-            animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-            className="rounded-full h-16 w-16 border-4 border-transparent border-t-white border-r-blue-400"
-          />
+          
         </motion.div>
 
         <motion.div
